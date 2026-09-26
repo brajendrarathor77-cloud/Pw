@@ -1,16 +1,15 @@
 {
+  "version": 2,
   "rewrites": [
-    { "source": "/pw-api/(.*)", "destination": "https://api.penpencil.co/$1" },
-    { "source": "/schedule-details", "destination": "/api/proxy-page?path=schedule-details" },
-    { "source": "/media/(.*)", "destination": "/api/proxy-page?path=media/$1" },
-    { "source": "/get-dpp-quiz", "destination": "/api/proxy-page?path=get-dpp-quiz" },
-    { "source": "/get-batch-test", "destination": "/api/proxy-page?path=get-batch-test" },
-    { "source": "/batches", "destination": "/" }
+    {
+      "source": "/(.*)",
+      "destination": "/server.js"
+    }
   ],
   "cleanUrls": true,
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
         { "key": "Access-Control-Allow-Methods", "value": "GET,POST,OPTIONS" },
