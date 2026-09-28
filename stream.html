@@ -166,8 +166,7 @@ function buildVideoItem(item){
         <div class="thumb-box"><img data-src="${esc(thumb)||'/static/site_thumbnail.png'}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="" class="lazy-img" onerror="this.src='/static/site_thumbnail.png'"></div>
         <div class="content-details">
             <div class="content-name">${esc(name)}</div>
-
-<div class="content-meta">${dur?`<span>${esc(dur)}</span>`:''} ${dur&&date?'<div class="meta-dot"></div>':''} ${date?`<span>${esc(date)}</span>`:''}</div>
+            <div class="content-meta">${dur?`<span>${esc(dur)}</span>`:''} ${dur&&date?'<div class="meta-dot"></div>':''} ${date?`<span>${esc(date)}</span>`:''}</div>
             <button class="complete-btn ${done}" onclick="toggleC(event,'${esc(id_)}','${esc(name)}')" data-id="${esc(id_)}"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
         </div>
     </a>`;
@@ -267,8 +266,7 @@ async function loadContent(tab, page){
         initComplete(panel);
         initLazyImages(panel);
     }catch{
-
-removeBottomSkels(panel);
+        removeBottomSkels(panel);
         if(page===1) showComingSoon(panel);
     }finally{
         st.loading=false;
