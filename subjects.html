@@ -270,7 +270,6 @@ function isVideoClass(item){
 async function loadSchedule(){
 const row=document.getElementById('sched-row');
 try{
-
 const data=await pw(`/pw-api/v1/batches/${BATCH_ID}/todays-schedule`);
 row.innerHTML='';
 if(!data.success||!data.data?.length){
@@ -292,10 +291,10 @@ const thumb=(item.videoDetails&&item.videoDetails.image)||'';
 
 if(isVideoClass(item)){
 any=true;
-            const a=document.createElement('a');
-            a.className='sc';
-            a.href=`/schedule-details?batchId=${ep(BATCH_ID)}&subjectId=${ep(sid)}&scheduleId=${ep(schId)}&tap=video`;
-            a.onclick=()=>localStorage.setItem('asm_current_item', JSON.stringify(item));
+const a=document.createElement('a');
+a.className='sc';
+a.href=`/schedule-details?batchId=${ep(BATCH_ID)}&subjectId=${ep(sid)}&scheduleId=${ep(schId)}&tap=video`;
+a.onclick=()=>{localStorage.setItem('asm_current_item', JSON.stringify(item));};
 if(tagL==='upcoming'){
 a.onclick=ev=>{ev.preventDefault();showMsg(`Class not started yet. Begins at ${st}.`);};
 }
@@ -429,7 +428,6 @@ finally{testsLoading=false;}
 }
 
 async function loadSectionTests(secId,type){
-
 if(type==='objective'){
 if(loadedObjSections[secId]!==undefined)return;
 loadedObjSections[secId]=null;
