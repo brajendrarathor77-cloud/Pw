@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +30,7 @@ body,html{min-height:100%;font-family:Inter,sans-serif;background:#0f172a;color:
 .sc-teacher-bg{width:100%;display:block}
 .sc-teacher-img{position:absolute;left:50%;transform:translateX(-50%);bottom:22.08%;width:auto;max-width:88%;height:77.92%;object-fit:contain;object-position:bottom}
 .sc-teacher-name{position:absolute;bottom:0;left:0;right:0;height:22.08%;display:flex;align-items:center;justify-content:center;padding:0 6px;font-size:clamp(9px,2.5vw,12px);font-weight:700;color:#fff;text-align:center;line-height:1.2;overflow:hidden;word-break:break-word}
-.sc-body{padding:9px;flex-grow:1;display:flex;flex-direction:column;justify-space-between}
+.sc-body{padding:9px;flex-grow:1;display:flex;flex-direction:column;justify-content:space-between}
 .sc-top{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:5px}
 .tag{padding:2px 6px;border-radius:8px;font-size:9px;font-weight:bold;text-transform:uppercase;color:#fff;flex-shrink:0}
 .tag.live{background:#ff4444;animation:pt 2s infinite}
@@ -209,30 +210,8 @@ if(!BATCH_ID)location.href='/';
 document.getElementById('back-label').textContent=BATCH_NAME||'Batches';
 const TEACHER_BG='https://study-mf.pw.live/static/image/teacherbg.807b2b2f.png';
 
-// Complete Header fix for PW Org issue
-const PW_HDR={
-  "Accept": "application/json, text/plain, */*",
-  "Accept-Encoding": "gzip", 
-  "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 11; SM-A707F Build/RP1A.200720.012)", 
-  "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3OTA1MTg1MTIsImV4cCI6MTc5MTEyMzMxMi4xMDUsImRhdGEiOnsiX2lidIjo2OGI4MDcyODI0MTE2MTUyOTdmYzFjNSIsInVzZXJuYW1lIjoiOTk3NzQ2NzIwNSIsImZpcnN0TmFtZSI6IkhhcmlvbSIsImxhc3ROYW1lIjoiIiwib3JnYW5pemF0aW9uIjp7Il9pZCI6IjVlYjM5M2VlOTVmYWI3NDY4YTc5ZDE4OSIsIndlYnNpdGUiOiJwaHlzaWNzd2FsbGFoLmNvbSIsIm5hbWUiOiJQaHlzaWNzd2FsbGFoIn0sInJvbGVzIjpbIjViNjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsIm9uZVJvbGVzIjpbXSwidHlwZSI6IlVTRVIifSwianRpIjoiYmlxRHlmS2dRR21zMVRzM25jWWVzZ182OGI4MDcyODI0MTE2MTUyOTdmYzFjNSJ9.MVM08HaT5dEukedD_QyuclHh4_v7V8X8jg7lBhGq5Fk", 
-  "client-id": "ADMIN", 
-  "client-type": "WEB", 
-  "client-version": "1.0.0",
-  "organizationid": "5eb393ee95fab7468a79d189",
-  "content-type": "application/json", 
-  "randomid": "3d3b49f068728fa3"
-};
-
-async function pw(url){
-  try{
-    const r=await fetch(url,{headers:PW_HDR});
-    const res=await r.json();
-    return res;
-  }catch(err){
-    return {success:false, error:err};
-  }
-}
-
+const PW_HDR={"Accept-Encoding": "gzip", "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 11; SM-A707F Build/RP1A.200720.012)", "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3OTA1MTg1MTIsImV4cCI6MTc5MTEyMzMxMi4xMDUsImRhdGEiOnsiX2lkIjoiNjhiODA3MjgyYzQxMTYxNTI5N2ZjMWM1IiwidXNlcm5hbWUiOiI5OTc3NDY3MjA1IiwiZmlyc3ROYW1lIjoiSGFyaW9tIiwibGFzdE5hbWUiOiIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwib25lUm9sZXMiOltdLCJ0eXBlIjoiVVNFUiJ9LCJqdGkiOiJiaXFEeWZLZ1FHbXMxVHMzbmNZZXNnXzY4YjgwNzI4MmM0MTE2MTUyOTdmYzFjNSJ9.MVM08HaT5dEukedD_QyuclHh4_v7V8X8jg7lBhGq5Fk", "client-id": "ADMIN", "client-type": "MOBILE", "client-version": "538", "content-type": "application/json", "device-meta": "{\"APP_VERSION\":\"538\",\"APP_VERSION_NAME\":\"15.32.0\",\"DEVICE_MAKE\":\"Samsung\",\"DEVICE_MODEL\":\"SM-A707F\",\"OS_VERSION\":\"11\",\"PACKAGE_NAME\":\"xyz.penpencil.physicswala\",\"network\":\"wifi_data\",\"carrier\":\"UNDEFINED\"}", "randomid": "3d3b49f068728fa3", "referer": "https://android.pw.live"};
+async function pw(url){return fetch(url,{headers:PW_HDR}).then(r=>r.json());}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function ep(v){return encodeURIComponent(v||'')}
 function fmtIST(iso){if(!iso)return'';try{const d=new Date(new Date(iso).getTime()+(5*60+30)*60000);let h=d.getUTCHours(),m=d.getUTCMinutes(),ap=h>=12?'PM':'AM';h=h%12||12;return`${h}:${String(m).padStart(2,'0')}${ap}`;}catch{return'';}}
@@ -292,6 +271,7 @@ function isVideoClass(item){
 async function loadSchedule(){
 const row=document.getElementById('sched-row');
 try{
+
 const data=await pw(`/pw-api/v1/batches/${BATCH_ID}/todays-schedule`);
 row.innerHTML='';
 if(!data.success||!data.data?.length){
@@ -313,10 +293,10 @@ const thumb=(item.videoDetails&&item.videoDetails.image)||'';
 
 if(isVideoClass(item)){
 any=true;
-const a=document.createElement('a');
-a.className='sc';
-a.href=`/schedule-details?batchId=${ep(BATCH_ID)}&subjectId=${ep(sid)}&scheduleId=${ep(schId)}&tap=video`;
-a.onclick=()=>{localStorage.setItem('asm_current_item', JSON.stringify(item));};
+            const a=document.createElement('a');
+            a.className='sc';
+            a.href=`/schedule-details?batchId=${ep(BATCH_ID)}&subjectId=${ep(sid)}&scheduleId=${ep(schId)}&tap=video`;
+            a.onclick=()=>localStorage.setItem('asm_current_item', JSON.stringify(item));
 if(tagL==='upcoming'){
 a.onclick=ev=>{ev.preventDefault();showMsg(`Class not started yet. Begins at ${st}.`);};
 }
@@ -375,6 +355,8 @@ row.innerHTML='<p style="font-style:italic;color:#94a3b8;padding:12px 0;font-siz
 }
 
 let khazanaId=null,subjectsLoaded=false;
+function subjSkelCount(){return Math.max(3,Math.floor((window.innerHeight-200)/clamp(76,110)));}
+function clamp(min,max){return Math.min(max,Math.max(min,Math.floor(window.innerHeight*0.15)));}
 function showSubjSkels(){const n=Math.max(3,Math.floor((window.innerHeight-200)/100));document.getElementById('subj-list').innerHTML=Array(n).fill('<div class="skel" style="height:clamp(76px,20vw,110px);border-radius:14px;margin-bottom:12px"></div>').join('');}
 async function loadSubjects(){
 if(subjectsLoaded)return;subjectsLoaded=true;
@@ -406,6 +388,7 @@ if(!khazanaId){
 list.innerHTML=`<li><div style="text-align:center;padding:60px 20px;color:#64748b"><div style="font-size:48px;margin-bottom:14px;opacity:0.5">🏆</div><div style="font-size:16px;font-weight:700;color:#94a3b8;margin-bottom:8px">No Khazana Available</div><div style="font-size:13px">Not available for <strong style="color:#94a3b8">${esc(BATCH_NAME)}</strong></div></div></li>`;
 return;
 }
+list.innerHTML='<div class="skel" style="height:clamp(76px,20vw,110px);border-radius:14px"></div>';
 try{
 const data=await pw(`/pw-api/v2/programs/${khazanaId}/filters?page=1&limit=20`);
 const khName=data.data?.name||'Khazana';
@@ -447,6 +430,7 @@ finally{testsLoading=false;}
 }
 
 async function loadSectionTests(secId,type){
+
 if(type==='objective'){
 if(loadedObjSections[secId]!==undefined)return;
 loadedObjSections[secId]=null;
