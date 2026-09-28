@@ -159,7 +159,7 @@ function buildVideoItem(item){
     const id_=item._id||'';
     const name=item.topic||vd.name||'';
     const done=getC()[id_]?'done':'';
-    const href=`https://studyaura.online/player?rc=${ep(BATCH_ID)}&subject=${ep(SUBJECT_ID)}&pro=${ep(id_)}&title=${topicName}`;
+    const href=`/schedule-details?batchId=${ep(BATCH_ID)}&subjectId=${ep(SUBJECT_ID)}&scheduleId=${ep(id_)}&tap=video`;
     const li=document.createElement('li');
     li.className='content-item';
     li.innerHTML=`<a class="content-link" href="${esc(href)}" onclick="localStorage.setItem('asm_current_item', decodeURIComponent('${encodeURIComponent(JSON.stringify(item))}'))">
