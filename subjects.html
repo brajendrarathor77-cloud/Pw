@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Arjuna JEE 2027 â€” Mod Galaxy</title>
+<title>Arjuna JEE 2027 — Mod Galaxy</title>
 <link rel="icon" type="image/png" href="/static/site_logo.png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;outline:none;-webkit-tap-highlight-color:transparent;user-select:none}
@@ -210,12 +210,12 @@ if(!BATCH_ID)location.href='/';
 document.getElementById('back-label').textContent=BATCH_NAME||'Batches';
 const TEACHER_BG='https://study-mf.pw.live/static/image/teacherbg.807b2b2f.png';
 
-const PW_HDR={"Accept-Encoding": "gzip", "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 11; SM-A707F Build/RP1A.200720.012)", "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3ODE2Mzc3MDIuNDIyLCJkYXRhIjp7Il9pZCI6IjY3YzQyNDQxYTM2NWIxZjNmMzc3NjIxMCIsInVzZXJuYW1lIjoiOTA1NDAxMzQ5MiIsImZpcnN0TmFtZSI6Ik1rIE1vbWluIiwibGFzdE5hbWUiOiIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJNS01LQEdNQUlMLkNPTSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImp0aSI6IkVOQjAtWnplUWxPX2lDYnJnOE1IYWdfNjdjNDI0NDFhMzY1YjFmM2YzNzc2MjEwIiwiaWF0IjoxNzgxMDMyOTAyfQ.RVSrUHl5_rff9zyA22gvWf3uurlmS8WmwFPx25idhII", "client-id": "ADMIN", "client-type": "MOBILE", "client-version": "538", "content-type": "application/json", "device-meta": "{\"APP_VERSION\":\"538\",\"APP_VERSION_NAME\":\"15.32.0\",\"DEVICE_MAKE\":\"Samsung\",\"DEVICE_MODEL\":\"SM-A707F\",\"OS_VERSION\":\"11\",\"PACKAGE_NAME\":\"xyz.penpencil.physicswala\",\"network\":\"wifi_data\",\"carrier\":\"UNDEFINED\"}", "randomid": "3d3b49f068728fa3", "referer": "https://android.pw.live"};
+const PW_HDR={"Accept-Encoding": "gzip", "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 11; SM-A707F Build/RP1A.200720.012)", "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3OTA1MTg1MTIsImV4cCI6MTc5MTEyMzMxMi4xMDUsImRhdGEiOnsiX2lkIjoiNjhiODA3MjgyYzQxMTYxNTI5N2ZjMWM1IiwidXNlcm5hbWUiOiI5OTc3NDY3MjA1IiwiZmlyc3ROYW1lIjoiSGFyaW9tIiwibGFzdE5hbWUiOiIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwib25lUm9sZXMiOltdLCJ0eXBlIjoiVVNFUiJ9LCJqdGkiOiJiaXFEeWZLZ1FHbXMxVHMzbmNZZXNnXzY4YjgwNzI4MmM0MTE2MTUyOTdmYzFjNSJ9.MVM08HaT5dEukedD_QyuclHh4_v7V8X8jg7lBhGq5Fk", "client-id": "ADMIN", "client-type": "MOBILE", "client-version": "538", "content-type": "application/json", "device-meta": "{\"APP_VERSION\":\"538\",\"APP_VERSION_NAME\":\"15.32.0\",\"DEVICE_MAKE\":\"Samsung\",\"DEVICE_MODEL\":\"SM-A707F\",\"OS_VERSION\":\"11\",\"PACKAGE_NAME\":\"xyz.penpencil.physicswala\",\"network\":\"wifi_data\",\"carrier\":\"UNDEFINED\"}", "randomid": "3d3b49f068728fa3", "referer": "https://android.pw.live"};
 async function pw(url){return fetch(url,{headers:PW_HDR}).then(r=>r.json());}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function ep(v){return encodeURIComponent(v||'')}
 function fmtIST(iso){if(!iso)return'';try{const d=new Date(new Date(iso).getTime()+(5*60+30)*60000);let h=d.getUTCHours(),m=d.getUTCMinutes(),ap=h>=12?'PM':'AM';h=h%12||12;return`${h}:${String(m).padStart(2,'0')}${ap}`;}catch{return'';}}
-function fmtHeld(iso){if(!iso)return'';try{const d=new Date(new Date(iso).getTime()+(5*60+30)*60000),M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];let h=d.getUTCHours(),m=d.getUTCMinutes(),ap=h>=12?'PM':'AM';h=h%12||12;return`${d.getUTCDate()} ${M[d.getUTCMonth()]} ${d.getUTCFullYear()} â€¢ ${h}:${String(m).padStart(2,'0')} ${ap}`;}catch{return'';}}
+function fmtHeld(iso){if(!iso)return'';try{const d=new Date(new Date(iso).getTime()+(5*60+30)*60000),M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];let h=d.getUTCHours(),m=d.getUTCMinutes(),ap=h>=12?'PM':'AM';h=h%12||12;return`${d.getUTCDate()} ${M[d.getUTCMonth()]} ${d.getUTCFullYear()} • ${h}:${String(m).padStart(2,'0')} ${ap}`;}catch{return'';}}
 function relTime(ts){const s=Math.floor((Date.now()-new Date(ts))/1000);if(s>=31536000)return Math.floor(s/31536000)+'y ago';if(s>=86400)return Math.floor(s/86400)+'d ago';if(s>=3600)return Math.floor(s/3600)+'h ago';if(s>=60)return Math.floor(s/60)+'m ago';return'just now';}
 function linkify(t){return t.replace(/(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig,'<a href="$1" target="_blank">$1</a>');}
 function showMsg(t){const p=document.getElementById('popup');p.textContent=t;p.classList.add('show');setTimeout(()=>p.classList.remove('show'),3000);}
@@ -385,7 +385,7 @@ if(khazanaRendered)return;khazanaRendered=true;
 const list=document.getElementById('khazana-list');
 list.innerHTML='<div class="skel" style="height:clamp(76px,20vw,110px);border-radius:14px"></div>';
 if(!khazanaId){
-list.innerHTML=`<li><div style="text-align:center;padding:60px 20px;color:#64748b"><div style="font-size:48px;margin-bottom:14px;opacity:0.5">ðŸ†</div><div style="font-size:16px;font-weight:700;color:#94a3b8;margin-bottom:8px">No Khazana Available</div><div style="font-size:13px">Not available for <strong style="color:#94a3b8">${esc(BATCH_NAME)}</strong></div></div></li>`;
+list.innerHTML=`<li><div style="text-align:center;padding:60px 20px;color:#64748b"><div style="font-size:48px;margin-bottom:14px;opacity:0.5">🏆</div><div style="font-size:16px;font-weight:700;color:#94a3b8;margin-bottom:8px">No Khazana Available</div><div style="font-size:13px">Not available for <strong style="color:#94a3b8">${esc(BATCH_NAME)}</strong></div></div></li>`;
 return;
 }
 list.innerHTML='<div class="skel" style="height:clamp(76px,20vw,110px);border-radius:14px"></div>';
@@ -501,17 +501,17 @@ tests.forEach(t=>{
 const now=Date.now(),sMs=t.startTimeIso?new Date(t.startTimeIso).getTime():null;
 const ns=sMs&&sMs>now,ra=!!t.isResultAwaiting;
 let badge='';
-if(ns)badge=`<span class="test-badge b-ns">â³ Not Started</span>`;
-else if(ra)badge=`<span class="test-badge b-ra">ðŸ“Š Result Awaiting</span>`;
-else if(sMs)badge=`<span class="test-badge b-av">âœ… Available</span>`;
+if(ns)badge=`<span class="test-badge b-ns">⏳ Not Started</span>`;
+else if(ra)badge=`<span class="test-badge b-ra">📊 Result Awaiting</span>`;
+else if(sMs)badge=`<span class="test-badge b-av">✅ Available</span>`;
 const card=document.createElement('div');card.className='test-card';
 card.dataset.siso=t.startTimeIso||'';card.dataset.ra=ra?'true':'false';card.dataset.held=t.heldOn||'';card.dataset.tid=t._id;card.dataset.tname=t.name||'';card.dataset.hasSyl=t.enableSyllabus?'true':'false';
 
-card.innerHTML=`<div class="test-card-body"><div class="test-card-name">${esc(t.name||'Untitled')}</div><div class="test-meta"><span class="test-chip">${ICO_Q}${t.totalQuestions} Qs</span><span class="test-chip">${ICO_S}${t.totalMarks} Marks</span><span class="test-chip">${ICO_C}${t.maxDuration} Mins</span></div>${badge?`<div class="test-status-row">${badge}</div>`:''}${t.heldOn?`<div class="test-date-row">${ICO_D}<span class="test-date-text">Starts: ${esc(t.heldOn)}</span></div>`:''}</div>${t.enableSyllabus?`<div class="test-syl-wrap"><button class="test-syl-btn" onclick="event.stopPropagation();openSyl(this)">ðŸ“‹ View Syllabus</button></div>`:''}`;
+card.innerHTML=`<div class="test-card-body"><div class="test-card-name">${esc(t.name||'Untitled')}</div><div class="test-meta"><span class="test-chip">${ICO_Q}${t.totalQuestions} Qs</span><span class="test-chip">${ICO_S}${t.totalMarks} Marks</span><span class="test-chip">${ICO_C}${t.maxDuration} Mins</span></div>${badge?`<div class="test-status-row">${badge}</div>`:''}${t.heldOn?`<div class="test-date-row">${ICO_D}<span class="test-date-text">Starts: ${esc(t.heldOn)}</span></div>`:''}</div>${t.enableSyllabus?`<div class="test-syl-wrap"><button class="test-syl-btn" onclick="event.stopPropagation();openSyl(this)">📋 View Syllabus</button></div>`:''}`;
 card.querySelector('.test-card-body').addEventListener('click',()=>{
 const si=card.dataset.siso,isRa=card.dataset.ra==='true',held=card.dataset.held;
-if(si){const ms=new Date(si).getTime();if(!isNaN(ms)&&ms>Date.now()){showInfo('â³','Test Not Started Yet',`Scheduled:\n\nðŸ“… ${held}\n\nCome back at scheduled time ðŸ’ª`);return;}}
-if(isRa){showInfo('ðŸ“Š','Result Not Published','Result not published yet. Once out, you can start. ðŸ””');return;}
+if(si){const ms=new Date(si).getTime();if(!isNaN(ms)&&ms>Date.now()){showInfo('⏳','Test Not Started Yet',`Scheduled:\n\n📅 ${held}\n\nCome back at scheduled time 💪`);return;}}
+if(isRa){showInfo('📊','Result Not Published','Result not published yet. Once out, you can start. 🔔');return;}
 location.href=`/get-batch-test?testId=${ep(card.dataset.tid)}&testName=${ep(card.dataset.tname)}&batchId=${ep(BATCH_ID)}`;
 });
 list.appendChild(card);
@@ -519,13 +519,13 @@ list.appendChild(card);
 ar.appendChild(list);
 }
 
-function ndH(t){return`<div class="no-data"><div class="no-data-icon">ðŸ“</div><div class="no-data-title">${t}</div></div>`;}
+function ndH(t){return`<div class="no-data"><div class="no-data-icon">📝</div><div class="no-data-title">${t}</div></div>`;}
 
 let sylLangs=[],sylLang='',sylData={};
 async function openSyl(btn){
 const card=btn.closest('.test-card');
 const tid=card.dataset.tid,tname=card.dataset.tname;
-document.getElementById('syl-title').textContent=(tname||'')+' â€” Syllabus';
+document.getElementById('syl-title').textContent=(tname||'')+' — Syllabus';
 document.getElementById('syl-langs').style.display='none';
 document.getElementById('syl-content').innerHTML='<div class="syl-loading">Loading syllabus...</div>';
 document.getElementById('syl-modal').classList.add('open');
@@ -595,4 +595,3 @@ loadSchedule();loadSubjects();
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a092803a7f39cc65',t:'MTc4MTAzMjkwMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"d791bbf0a81b4e638ace830305588120","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
-
