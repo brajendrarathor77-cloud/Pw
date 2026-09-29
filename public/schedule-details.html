@@ -117,7 +117,6 @@
                 color: rgba(255,255,255,.65)
             }
 
-            /* Live Player UI Styles */
             #player-header {
                 position: absolute;
                 top: 0;
@@ -170,35 +169,6 @@
                 animation: blink 1.2s ease infinite
             }
 
-            #player-footer {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                z-index: 30;
-                background: linear-gradient(transparent 0%,rgba(0,0,0,.85) 100%);
-                padding: 10px 14px
-            }
-
-            .time-row {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 6px
-            }
-
-            .t-time {
-                color: #fff;
-                font-size: 13px;
-                font-family: monospace;
-                font-weight: 500
-            }
-
-            /* Live Progress Bar Adjustments */
-            body.is-live-mode .bar-fill {
-                background: var(--live-red) !important;
-            }
-
             @keyframes blink {
                 0%, 100% { opacity: 1; transform: scale(1); }
                 50% { opacity: 0.3; transform: scale(0.85); }
@@ -216,117 +186,61 @@
                     <div id="vid-box">
                         <video id="vid" playsinline preload="auto"></video>
                         
-                        <!-- Dynamic Header -->
                         <div id="player-header">
-                            <span id="player-title">Loading Lecture...</span>
-                            <div class="live-badge" id="liveTag" onclick="jumpToLiveEdge()">
+                            <span id="player-title">Loading...</span>
+                            <div class="live-badge" id="liveTag">
                                 <span class="live-dot"></span>
                                 <span>LIVE</span>
                             </div>
                         </div>
 
-                        <!-- Loader Overlay -->
                         <div class="ov" id="ovLoad">
                             <div class="spinner"></div>
-                            <p id="loadMsg">Connecting to Stream...</p>
+                            <p id="loadMsg">Redirecting to Player…</p>
                         </div>
-
-                        <!-- Player Footer Controls -->
-                        <div id="player-footer">
-                            <div class="time-row">
-                                <span class="t-time" id="timeDisplay">00:00 / 00:00</span>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
         </div>
 
         <script>
-            let hlsPlayer = null;
+            (function handleRedirection() {
+                const urlParams = new URLSearchParams(window.location.search);
 
-            // 1. Live vs Recorded Redirect Link Builder
-            function buildPlayerUrl(options) {
-                const baseUrl = "https://studyaura.online/player";
-                const params = new URLSearchParams();
-
-                if (options.rc) params.set('rc', options.rc);
-                if (options.pro) params.set('pro', options.pro);
-                if (options.title) params.set('title', options.title);
-                if (options.subject) params.set('subject', options.subject);
-
-                if (options.isLive) {
-                    if (options.topic) params.set('topic', options.topic);
-                    params.set('live', 'true');
-                    params.set('type', 'live');
-                }
-
-                return `${baseUrl}?${params.toString()}`;
-            }
-
-            // 2. Sync UI Features according to Mode
-            function setupPlayerMode() {
-                const currentParams = new URLSearchParams(window.location.search);
-                const isLive = currentParams.get('live') === 'true' || currentParams.get('type') === 'live';
+                // Extract all mandatory & optional parameters
+                const rc = urlParams.get('rc') || urlParams.get('batchId');
+                const pro = urlParams.get('pro') || urlParams.get('scheduleId');
+                const subject = urlParams.get('subject') || urlParams.get('subjectId');
+                const title = urlParams.get('title');
+                const topic = urlParams.get('topic');
                 
-                // Display Title
-                const rawTitle = currentParams.get('title') || 'StudyAura Lecture';
-                const titleEl = document.getElementById('player-title');
-                if (titleEl) {
-                    titleEl.textContent = decodeURIComponent(rawTitle.replace(/\+/g, ' '));
+                // Detection logic for live class (String or Boolean check)
+                const isLive = urlParams.get('live') === 'true' || 
+                               urlParams.get('type') === 'live' || 
+                               urlParams.get('isLive') === 'true';
+
+                if (rc && pro) {
+                    const targetBase = "https://studyaura.online/player";
+                    const queryParts = [];
+
+                    queryParts.push(`rc=${encodeURIComponent(rc)}`);
+                    queryParts.push(`pro=${encodeURIComponent(pro)}`);
+
+                    if (title) queryParts.push(`title=${encodeURIComponent(title)}`);
+                    if (subject) queryParts.push(`subject=${encodeURIComponent(subject)}`);
+                    if (topic) queryParts.push(`topic=${encodeURIComponent(topic)}`);
+
+                    // IF LIVE CLASS: Force exact param structure expected by studyaura player
+                    if (isLive) {
+                        queryParts.push("live=true");
+                        queryParts.push("type=live");
+                    }
+
+                    const finalRedirectUrl = `${targetBase}?${queryParts.join('&')}`;
+
+                    // Execute instant redirection
+                    window.location.href = finalRedirectUrl;
                 }
-
-                // If Live Mode is active, enable Live UI components
-                if (isLive) {
-                    document.body.classList.add('is-live-mode');
-                    
-                    const liveBadge = document.getElementById('liveTag');
-                    if (liveBadge) liveBadge.classList.add('on');
-
-                    const loadMsg = document.getElementById('loadMsg');
-                    if (loadMsg) loadMsg.textContent = 'Connecting to Live Broadcast...';
-
-                    const timeDisplay = document.getElementById('timeDisplay');
-                    if (timeDisplay) timeDisplay.textContent = '● LIVE Stream';
-                }
-            }
-
-            // Jump directly to the latest live edge if user lags behind
-            function jumpToLiveEdge() {
-                const vid = document.getElementById('vid');
-                if (vid && vid.seekable.length > 0) {
-                    vid.currentTime = vid.seekable.end(vid.seekable.length - 1);
-                }
-            }
-
-            // 3. Auto-Redirect Execution
-            (function init() {
-                const currentParams = new URLSearchParams(window.location.search);
-
-                const batchId = currentParams.get('batchId') || currentParams.get('rc');
-                const scheduleId = currentParams.get('scheduleId') || currentParams.get('pro');
-                const subjectId = currentParams.get('subjectId') || currentParams.get('subject');
-                const title = currentParams.get('title') || document.title;
-                const topic = currentParams.get('topic');
-                const isLive = currentParams.get('live') === 'true' || currentParams.get('type') === 'live';
-
-                // Check if running directly on player domain or needs redirect
-                if (window.location.hostname !== 'studyaura.online' && batchId && scheduleId) {
-                    const targetUrl = buildPlayerUrl({
-                        rc: batchId,
-                        pro: scheduleId,
-                        subject: subjectId,
-                        title: title,
-                        topic: topic,
-                        isLive: isLive
-                    });
-                    window.location.replace(targetUrl);
-                    return;
-                }
-
-                // Setup Mode UI if already on player
-                setupPlayerMode();
             })();
         </script>
     </body>
