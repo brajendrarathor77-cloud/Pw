@@ -1,42 +1,175 @@
-<script>
-    (function handleRedirection() {
-        const urlParams = new URLSearchParams(window.location.search);
-
-        // Parameters Fetching
-        const rc = urlParams.get('rc') || urlParams.get('batchId');
-        const pro = urlParams.get('pro') || urlParams.get('scheduleId');
-        const subject = urlParams.get('subject') || urlParams.get('subjectId');
-        const title = urlParams.get('title');
-        const topic = urlParams.get('topic');
-        
-        // Strict Live Check
-        const isLive = urlParams.get('live') === 'true' || 
-                       urlParams.get('type') === 'live' || 
-                       urlParams.get('isLive') === 'true';
-
-        if (rc && pro) {
-            // Live class ke liye endpoint /player se /stream ya /live hota hai
-            const targetBase = isLive 
-                ? "https://studyaura.online/live"     // <--- Live Features Endpoint
-                : "https://studyaura.online/player";   // Recorded Player Endpoint
-
-            const queryParts = [];
-
-            queryParts.push(`rc=${encodeURIComponent(rc)}`);
-            queryParts.push(`pro=${encodeURIComponent(pro)}`);
-
-            if (title) queryParts.push(`title=${encodeURIComponent(title)}`);
-            if (subject) queryParts.push(`subject=${encodeURIComponent(subject)}`);
-            if (topic) queryParts.push(`topic=${encodeURIComponent(topic)}`);
-
-            if (isLive) {
-                queryParts.push("live=true");
-                queryParts.push("type=live");
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <title>StudyAura Video Player</title>
+        <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.min.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+            *,*::before,*::after {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                -webkit-tap-highlight-color: transparent;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                user-select: none
             }
 
-            const finalRedirectUrl = `${targetBase}?${queryParts.join('&')}`;
+            :root {
+                --accent: #5a4bda;
+                --bg: #000;
+                --surface: #111118;
+                --surface2: #1c1c27;
+                --border: rgba(255,255,255,.1);
+                --text: #e8e8f0;
+                --muted: #7070a0
+            }
 
-            window.location.href = finalRedirectUrl;
-        }
-    })();
-</script>
+            html,body {
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                background: var(--bg);
+                font-family: 'DM Sans',-apple-system,sans-serif;
+                color: var(--text)
+            }
+
+            #shell {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                flex-direction: column;
+                background: var(--bg);
+                overflow: hidden
+            }
+
+            #main-row {
+                flex: 1;
+                min-height: 0;
+                display: flex;
+                flex-direction: row;
+                overflow: hidden
+            }
+
+            #video-col {
+                flex: 1;
+                min-width: 0;
+                min-height: 0;
+                position: relative;
+                background: #000;
+                overflow: hidden
+            }
+
+            #vid-box {
+                position: absolute;
+                inset: 0;
+                background: #000;
+                display: flex;
+                align-items: center;
+                justify-content: center
+            }
+
+            video {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                background: #000;
+                display: block;
+                outline: none;
+                pointer-events: none
+            }
+
+            .ov {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                z-index: 10
+            }
+
+            #ovLoad {
+                background: rgba(0,0,0,.82)
+            }
+
+            .spinner {
+                width: 40px;
+                height: 40px;
+                border: 3px solid rgba(90,75,218,.18);
+                border-top-color: var(--accent);
+                border-radius: 50%;
+                animation: spin .8s linear infinite
+            }
+
+            #ovLoad p {
+                font-size: 13px;
+                color: rgba(255,255,255,.65)
+            }
+
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="shell">
+            <div id="main-row">
+                <div id="video-col">
+                    <div id="vid-box">
+                        <video id="vid" playsinline preload="auto"></video>
+                        <div class="ov" id="ovLoad">
+                            <div class="spinner"></div>
+                            <p id="loadMsg">Redirecting to Player...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            (function redirectToNewPlayer() {
+                const urlParams = new URLSearchParams(window.location.search);
+                
+                // Fetch required parameters
+                const rc = urlParams.get('batchId') || urlParams.get('rc');
+                const pro = urlParams.get('scheduleId') || urlParams.get('pro');
+                const subject = urlParams.get('subjectId') || urlParams.get('subject');
+                const title = urlParams.get('title') || document.title;
+                const topic = urlParams.get('topic');
+
+                // Live class detection check
+                const isLive = urlParams.get('live') === 'true' || 
+                               urlParams.get('type') === 'live' || 
+                               urlParams.get('isLive') === 'true';
+
+                if (rc && pro) {
+                    const baseUrl = "https://studyaura.online/player";
+                    const params = new URLSearchParams();
+
+                    // Standard parameters
+                    params.set('rc', rc);
+                    params.set('pro', pro);
+                    if (title) params.set('title', title);
+                    if (subject) params.set('subject', subject);
+
+                    // Append Live Class Specific Parameters
+                    if (isLive) {
+                        if (topic) params.set('topic', topic);
+                        params.set('live', 'true');
+                        params.set('type', 'live');
+                    }
+
+                    const targetUrl = `${baseUrl}?${params.toString()}`;
+                    window.location.replace(targetUrl);
+                }
+            })();
+        </script>
+    </body>
+</html>
