@@ -1,98 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khazana — Mod Galaxy</title>
-  <link rel="icon" type="image/png" href="/static/site_logo.png">
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <style>
-    body { font-family: 'Inter', sans-serif; background: #0f172a; color: #fff; margin: 0; padding: 20px; }
-    h1 { color: #818cf8; text-align: center; }
-    .form-box { max-width: 500px; margin: 0 auto 20px auto; background: #1e293b; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px; }
-    input, select, button { padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 14px; }
-    button { background: #6366f1; font-weight: bold; cursor: pointer; border: none; margin-top: 10px; }
-    button:hover { background: #4f46e5; }
-    #result { max-width: 800px; margin: 0 auto; background: #1e293b; padding: 15px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; font-family: monospace; color: #38bdf8; overflow-x: auto; }
-  </style>
-</head>
-<body>
+import type { NextApiRequest, NextApiResponse } from "next";
+import axios from "axios";
+import { getHeaders } from "@/utils/auth";
+import { authenticateUser, clearAuthCookies } from "@/utils/authenticateUser";
 
-  <script>
-    // Access Check (Authentication Guard)
-    (function(){
-      var e = localStorage.getItem('asm_access_expiry');
-      if(!e || Date.now() > parseInt(e)) {
-        localStorage.removeItem('asm_access_expiry');
-        window.location.href = '/get-access';
-        return;
-      }
-    })();
-  </script>
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { ProgramId, Type, SubjectId, ChapterId, page, limit } = req.query;
 
-  <h1>Khazana Portal</h1>
+  if (!ProgramId || !Type) {
+    return res.status(400).json({ message: "Missing Required Payloads" });
+  }
 
-  <div class="form-box">
-    <label>Program ID:</label>
-    <input type="text" id="programId" placeholder="e.g. 648b2... (Program ID enter karein)">
+  const typeStr = String(Type);
+  const programIdStr = String(ProgramId);
 
-    <label>Data Type:</label>
-    <select id="dataType" onchange="toggleInputs()">
-      <option value="filters">Filters</option>
-      <option value="teachers">Teachers</option>
-      <option value="chapters">Chapters</option>
-      <option value="topics">Topics</option>
-    </select>
+  if (
+    typeStr !== "filters" &&
+    typeStr !== "teachers" &&
+    typeStr !== "chapters" &&
+    typeStr !== "topics"
+  ) {
+    return res.status(400).json({ message: "Invalid Type parameter" });
+  }
 
-    <div id="subjectBox" style="display: none; flex-direction: column; gap: 5px;">
-      <label>Subject ID:</label>
-      <input type="text" id="subjectId" placeholder="Subject ID enter karein">
-    </div>
-
-    <div id="chapterBox" style="display: none; flex-direction: column; gap: 5px;">
-      <label>Chapter ID:</label>
-      <input type="text" id="chapterId" placeholder="Chapter ID enter karein">
-    </div>
-
-    <button onclick="fetchKhazanaData()">Fetch Data</button>
-  </div>
-
-  <div id="result">Data yahan dikhega...</div>
-
-  <script>
-    // Selected type ke mutabiq inputs show/hide karne ke liye
-    function toggleInputs() {
-      const type = document.getElementById('dataType').value;
-      document.getElementById('subjectBox').style.display = (type === 'chapters' || type === 'topics') ? 'flex' : 'none';
-      document.getElementById('chapterBox').style.display = (type === 'topics') ? 'flex' : 'none';
+  const PW_API = (process.env.PW_API || "https://api.penpencil.co");
+  let url = "";
+  if (typeStr === "filters") {
+    url = `${PW_API}/v2/programs/${programIdStr}/filters?page=1&limit=20`;
+  } else if (typeStr === "teachers") {
+    url = `${PW_API}/v2/programs/${programIdStr}/teachers?popular=false&page=1&limit=100`;
+  } else if (typeStr === "chapters") {
+    if (!SubjectId) {
+      return res.status(400).json({ message: "Missing SubjectId parameter for chapters Type" });
     }
-
-    async function fetchKhazanaData() {
-      const programId = document.getElementById('programId').value.trim();
-      const type = document.getElementById('dataType').value;
-      const subjectId = document.getElementById('subjectId').value.trim();
-      const chapterId = document.getElementById('chapterId').value.trim();
-      const resultDiv = document.getElementById('result');
-
-      if (!programId) {
-        alert("Kripya Program ID enter karein!");
-        return;
-      }
-
-      resultDiv.innerText = "Data load ho raha hai...";
-
-      try {
-        const params = { ProgramId: programId, Type: type };
-        if (subjectId) params.SubjectId = subjectId;
-        if (chapterId) params.ChapterId = chapterId;
-
-        // Aapki api/khazanaInfo.ts ko call kar raha hai
-        const response = await axios.get('/api/khazanaInfo', { params });
-        resultDiv.innerText = JSON.stringify(response.data, null, 2);
-      } catch (error) {
-        resultDiv.innerText = "Error: " + (error.response?.data?.message || error.message);
-      }
+    const pageNum = page ? String(page) : "1";
+    const limitNum = limit ? String(limit) : "20";
+    url = `${PW_API}/v2/programs/${programIdStr}/subjects/${String(SubjectId)}/chapters/list?page=${pageNum}&limit=${limitNum}`;
+  } else if (typeStr === "topics") {
+    if (!SubjectId || !ChapterId) {
+      return res.status(400).json({ message: "Missing SubjectId or ChapterId parameter for topics Type" });
     }
-  </script>
-</body>
-</html>
+    const pageNum = page ? String(page) : "1";
+    const limitNum = limit ? String(limit) : "20";
+    url = `${PW_API}/v2/programs/${programIdStr}/subjects/${String(SubjectId)}/chapters/${String(ChapterId)}/topics/list?page=${pageNum}&limit=${limitNum}`;
+  }
+
+  try {
+    const user = await authenticateUser(req, res);
+    const ActualToken = user.ActualToken;
+
+    const response = await axios.get(url, { headers: getHeaders(ActualToken ?? "") });
+    return res.status(200).json(response.data);
+  } catch (error: any) {
+    const status = error.response?.status || 500;
+    if (status === 401) {
+      clearAuthCookies(res);
+    }
+    return res.status(status).json({
+      message: error.response?.data?.message || "Error fetching Khazana info",
+    });
+  }
+}
