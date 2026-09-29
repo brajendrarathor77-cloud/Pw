@@ -1,49 +1,23 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Khazana Info</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khazana — Mod Galaxy</title>
+<link rel="icon" type="image/png" href="/static/site_logo.png">
+<style>
+body{font-family:Inter,sans-serif;background:#0f172a;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;}
+h1{color:#818cf8;margin-bottom:10px;}
+p{color:#94a3b8;margin-bottom:20px;}
+a{color:#fff;background:#6366f1;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:bold;}
+</style>
 </head>
 <body>
-  <h2>Khazana Data Loader</h2>
-  
-  <button onclick="fetchKhazanaData('filters')">Filters Load Karein</button>
-  <button onclick="fetchKhazanaData('teachers')">Teachers Load Karein</button>
-  <button onclick="fetchKhazanaData('chapters', '123')">Chapters Load Karein</button>
-  <button onclick="fetchKhazanaData('topics', '123', '456')">Topics Load Karein</button>
-
-  <pre id="output">Data yahan dikhega...</pre>
-
-  <script>
-    async function fetchKhazanaData(type, subjectId = null, chapterId = null, programId = "1") {
-      const output = document.getElementById('output');
-      output.textContent = "Loading...";
-
-      // Query String Taiyar Karein
-      const params = new URLSearchParams({
-        ProgramId: programId,
-        Type: type,
-        page: "1",
-        limit: "20"
-      });
-
-      if (subjectId) params.append("SubjectId", subjectId);
-      if (chapterId) params.append("ChapterId", chapterId);
-
-      try {
-        // Aapke Next.js Endpoint ko Call Karein
-        const response = await fetch(`/api/khazana?${params.toString()}`);
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Kuch galat hua");
-        }
-
-        output.textContent = JSON.stringify(data, null, 2);
-      } catch (err) {
-        output.textContent = "Error: " + err.message;
-      }
-    }
-  </script>
+<script>
+(function(){var e=localStorage.getItem('asm_access_expiry');if(!e||Date.now()>parseInt(e)){localStorage.removeItem('asm_access_expiry');window.location.href='/get-access';return;}})();
+</script>
+<h1>Khazana</h1>
+<p>This feature is coming soon to Mod Galaxy.</p>
+<a href="/">Return Home</a>
 </body>
 </html>
