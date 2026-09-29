@@ -20,14 +20,13 @@
 
             :root {
                 --accent: #5a4bda;
+                --live-red: #ff3b30;
                 --bg: #000;
                 --surface: #111118;
                 --surface2: #1c1c27;
                 --border: rgba(255,255,255,.1);
                 --text: #e8e8f0;
-                --muted: #7070a0;
-                --note: #3ecfcf;
-                --dpp: #ff9f43
+                --muted: #7070a0
             }
 
             html,body {
@@ -82,8 +81,7 @@
                 object-fit: contain;
                 background: #000;
                 display: block;
-                outline: none;
-                pointer-events: none
+                outline: none
             }
 
             .ov {
@@ -119,126 +117,18 @@
                 color: rgba(255,255,255,.65)
             }
 
-            #ovErr {
-                background: rgba(0,0,0,.88);
-                display: none;
-                padding: 20px;
-                text-align: center
-            }
-
-            #ovErr.on {
-                display: flex
-            }
-
-            #ovErr p {
-                font-size: 14px;
-                color: #ff6584;
-                max-width: 300px;
-                line-height: 1.5
-            }
-
-            #ovErr button {
-                padding: 8px 22px;
-                background: var(--accent);
-                color: #fff;
-                border: none;
-                border-radius: 8px;
-                font-size: 14px;
-                cursor: pointer;
-                font-family: inherit;
-                margin-top: 4px
-            }
-
-            #bufSpin {
-                position: absolute;
-                inset: 0;
-                display: none;
-                align-items: center;
-                justify-content: center;
-                z-index: 8;
-                pointer-events: none
-            }
-
-            #bufSpin.on {
-                display: flex
-            }
-
-            #bufSpin::after {
-                content: '';
-                width: 42px;
-                height: 42px;
-                border-radius: 50%;
-                border: 3px solid rgba(90,75,218,.18);
-                border-top-color: var(--accent);
-                animation: spin .75s linear infinite
-            }
-
-            #ctrl-overlay {
-                position: absolute;
-                inset: 0;
-                z-index: 20;
-                display: flex;
-                flex-direction: column;
-                transition: opacity .35s ease
-            }
-
-            #ctrl-overlay.visible {
-                opacity: 1;
-                pointer-events: auto
-            }
-
-            #ctrl-overlay.hidden {
-                opacity: 0;
-                pointer-events: none
-            }
-
-            #tap-shield {
-                position: absolute;
-                inset: 0;
-                z-index: 19;
-                background: transparent;
-                cursor: pointer;
-                display: none
-            }
-
-            #tap-shield.on {
-                display: block
-            }
-
+            /* Live Player UI Styles */
             #player-header {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                padding: 10px 14px;
-                background: linear-gradient(rgba(0,0,0,.72) 0%,transparent 100%);
-                flex-shrink: 0
-            }
-
-            .hdr-back {
-                background: none;
-                border: none;
-                color: #fff;
-                cursor: pointer;
-                padding: 6px;
-                display: flex;
-                align-items: center;
-                border-radius: 8px;
-                flex-shrink: 0;
-                transition: transform .12s
-            }
-
-            .hdr-back:active {
-                transform: scale(.88)
-            }
-
-            .hdr-back svg {
-                width: 22px;
-                height: 22px;
-                stroke: #fff;
-                fill: none;
-                stroke-width: 2;
-                stroke-linecap: round;
-                stroke-linejoin: round
+                padding: 12px 14px;
+                background: linear-gradient(rgba(0,0,0,.8) 0%,transparent 100%);
+                z-index: 30
             }
 
             #player-title {
@@ -252,82 +142,42 @@
                 text-overflow: ellipsis
             }
 
-            #tdBtn {
-                background: none;
-                border: none;
-                color: #fff;
-                cursor: pointer;
-                padding: 6px;
-                display: flex;
-                align-items: center;
-                border-radius: 8px;
-                flex-shrink: 0;
-                position: relative
-            }
-
-            #tdBtn>svg {
-                width: 22px;
-                height: 22px;
-                fill: #fff
-            }
-
-            #tdMenu {
-                position: absolute;
-                top: calc(100% + 2px);
-                right: 0;
-                background: rgba(12,12,20,.98);
-                border: 1px solid rgba(255,255,255,.12);
-                border-radius: 12px;
-                overflow: hidden;
-                min-width: 190px;
-                z-index: 200;
+            .live-badge {
                 display: none;
-                box-shadow: 0 8px 32px rgba(0,0,0,.9)
-            }
-
-            #tdMenu.on {
-                display: block
-            }
-
-            .tdm-row {
-                display: flex;
                 align-items: center;
-                gap: 10px;
-                padding: 14px 16px;
+                gap: 6px;
+                font-size: 11px;
+                font-weight: 700;
                 color: #fff;
-                font-size: 14px;
+                background: rgba(255, 59, 48, 0.2);
+                border: 1px solid var(--live-red);
+                padding: 3px 8px;
+                border-radius: 6px;
                 cursor: pointer;
-                border-bottom: 1px solid rgba(255,255,255,.07)
+                text-transform: uppercase;
+                letter-spacing: 0.5px
             }
 
-            .tdm-row:last-child {
-                border-bottom: none
+            .live-badge.on {
+                display: inline-flex
             }
 
-            .tdm-row:active {
-                background: rgba(255,255,255,.08)
-            }
-
-            .tdm-row svg {
-                width: 18px;
-                height: 18px;
-                flex-shrink: 0;
-                stroke: currentColor;
-                fill: none
-            }
-
-            #ctrl-mid {
-                flex: 1
+            .live-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--live-red);
+                animation: blink 1.2s ease infinite
             }
 
             #player-footer {
-                flex-shrink: 0;
-                background: linear-gradient(transparent 0%,rgba(0,0,0,.82) 100%);
-                padding: 6px 0 10px
-            }
-
-            .prog-wrap {
-                padding: 0 14px 6px
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 30;
+                background: linear-gradient(transparent 0%,rgba(0,0,0,.85) 100%);
+                padding: 10px 14px
             }
 
             .time-row {
@@ -337,12 +187,6 @@
                 margin-bottom: 6px
             }
 
-            .t-left {
-                display: flex;
-                align-items: center;
-                gap: 6px
-            }
-
             .t-time {
                 color: #fff;
                 font-size: 13px;
@@ -350,136 +194,18 @@
                 font-weight: 500
             }
 
-            .spd-badge {
-                background: rgba(255,255,255,.92);
-                color: #000;
-                font-size: 10px;
-                font-weight: 800;
-                padding: 1px 5px;
-                border-radius: 4px;
-                font-family: sans-serif
+            /* Live Progress Bar Adjustments */
+            body.is-live-mode .bar-fill {
+                background: var(--live-red) !important;
             }
 
-            .live-badge {
-                display: none;
-                align-items: center;
-                gap: 4px;
-                font-size: 11px;
-                font-weight: 700;
-                color: #fff
-            }
-
-            .live-badge.on {
-                display: flex
-            }
-
-            .live-dot {
-                width: 7px;
-                height: 7px;
-                border-radius: 50%;
-                background: red;
-                animation: blink 1.4s ease infinite
-            }
-
-            .bar-wrap {
-                position: relative;
-                height: 22px;
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-                touch-action: none
-            }
-
-            .bar-bg {
-                position: absolute;
-                left: 0;
-                right: 0;
-                height: 4px;
-                background: rgba(255,255,255,.2);
-                border-radius: 2px;
-                overflow: hidden
-            }
-
-            .bar-buf {
-                height: 100%;
-                background: rgba(255,255,255,.3);
-                position: absolute;
-                left: 0;
-                border-radius: 2px
-            }
-
-            .bar-fill {
-                height: 100%;
-                background: var(--accent);
-                position: absolute;
-                left: 0;
-                border-radius: 2px
-            }
-
-            .bar-thumb {
-                position: absolute;
-                top: 50%;
-                transform: translate(-50%,-50%);
-                width: 14px;
-                height: 14px;
-                background: #fff;
-                border-radius: 50%;
-                pointer-events: none;
-                box-shadow: 0 0 5px rgba(0,0,0,.6);
-                will-change: left
-            }
-
-            .bar-wrap:hover .bar-thumb {
-                transform: translate(-50%,-50%) scale(1.3)
-            }
-
-            .bar-input {
-                position: absolute;
-                inset: 0;
-                opacity: 0;
-                cursor: pointer;
-                width: 100%;
-                height: 100%
-            }
-
-            .btn-row {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 0 6px
-            }
-
-            .btn-l,.btn-r {
-                display: flex;
-                align-items: center
-            }
-
-            .cbtn {
-                background: none;
-                border: none;
-                color: #fff;
-                cursor: pointer;
-                min-width: 44px;
-                min-height: 44px;
-                padding: 4px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 8px;
-                flex-shrink: 0;
-                outline: none;
-                transition: transform .12s,opacity .12s
-            }
-
-            .cbtn:active {
-                transform: scale(.85);
-                opacity: .65
+            @keyframes blink {
+                0%, 100% { opacity: 1; transform: scale(1); }
+                50% { opacity: 0.3; transform: scale(0.85); }
             }
 
             @keyframes spin {
-                to {
-                    transform: rotate(360deg)
-                }
+                to { transform: rotate(360deg); }
             }
         </style>
     </head>
@@ -489,28 +215,47 @@
                 <div id="video-col">
                     <div id="vid-box">
                         <video id="vid" playsinline preload="auto"></video>
+                        
+                        <!-- Dynamic Header -->
+                        <div id="player-header">
+                            <span id="player-title">Loading Lecture...</span>
+                            <div class="live-badge" id="liveTag" onclick="jumpToLiveEdge()">
+                                <span class="live-dot"></span>
+                                <span>LIVE</span>
+                            </div>
+                        </div>
+
+                        <!-- Loader Overlay -->
                         <div class="ov" id="ovLoad">
                             <div class="spinner"></div>
-                            <p id="loadMsg">Redirecting to Player…</p>
+                            <p id="loadMsg">Connecting to Stream...</p>
                         </div>
+
+                        <!-- Player Footer Controls -->
+                        <div id="player-footer">
+                            <div class="time-row">
+                                <span class="t-time" id="timeDisplay">00:00 / 00:00</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
         <script>
-            // Hybrid helper to build player link for both Normal & Live classes
+            let hlsPlayer = null;
+
+            // 1. Live vs Recorded Redirect Link Builder
             function buildPlayerUrl(options) {
                 const baseUrl = "https://studyaura.online/player";
                 const params = new URLSearchParams();
 
-                // Standard Parameters
                 if (options.rc) params.set('rc', options.rc);
                 if (options.pro) params.set('pro', options.pro);
                 if (options.title) params.set('title', options.title);
                 if (options.subject) params.set('subject', options.subject);
 
-                // Conditional Live Parameters (only added if class is live)
                 if (options.isLive) {
                     if (options.topic) params.set('topic', options.topic);
                     params.set('live', 'true');
@@ -520,20 +265,54 @@
                 return `${baseUrl}?${params.toString()}`;
             }
 
-            // Automatic Redirection
-            (function redirectToNewPlayer() {
+            // 2. Sync UI Features according to Mode
+            function setupPlayerMode() {
+                const currentParams = new URLSearchParams(window.location.search);
+                const isLive = currentParams.get('live') === 'true' || currentParams.get('type') === 'live';
+                
+                // Display Title
+                const rawTitle = currentParams.get('title') || 'StudyAura Lecture';
+                const titleEl = document.getElementById('player-title');
+                if (titleEl) {
+                    titleEl.textContent = decodeURIComponent(rawTitle.replace(/\+/g, ' '));
+                }
+
+                // If Live Mode is active, enable Live UI components
+                if (isLive) {
+                    document.body.classList.add('is-live-mode');
+                    
+                    const liveBadge = document.getElementById('liveTag');
+                    if (liveBadge) liveBadge.classList.add('on');
+
+                    const loadMsg = document.getElementById('loadMsg');
+                    if (loadMsg) loadMsg.textContent = 'Connecting to Live Broadcast...';
+
+                    const timeDisplay = document.getElementById('timeDisplay');
+                    if (timeDisplay) timeDisplay.textContent = '● LIVE Stream';
+                }
+            }
+
+            // Jump directly to the latest live edge if user lags behind
+            function jumpToLiveEdge() {
+                const vid = document.getElementById('vid');
+                if (vid && vid.seekable.length > 0) {
+                    vid.currentTime = vid.seekable.end(vid.seekable.length - 1);
+                }
+            }
+
+            // 3. Auto-Redirect Execution
+            (function init() {
                 const currentParams = new URLSearchParams(window.location.search);
 
                 const batchId = currentParams.get('batchId') || currentParams.get('rc');
                 const scheduleId = currentParams.get('scheduleId') || currentParams.get('pro');
                 const subjectId = currentParams.get('subjectId') || currentParams.get('subject');
-                let title = currentParams.get('title') || document.title;
+                const title = currentParams.get('title') || document.title;
                 const topic = currentParams.get('topic');
-
-                // Check if class is live
                 const isLive = currentParams.get('live') === 'true' || currentParams.get('type') === 'live';
 
-                if (batchId && scheduleId) {
+                // Check if running directly on player domain or needs redirect
+                if (window.location.hostname !== 'studyaura.online' && batchId && scheduleId) {
                     const targetUrl = buildPlayerUrl({
                         rc: batchId,
                         pro: scheduleId,
@@ -542,9 +321,12 @@
                         topic: topic,
                         isLive: isLive
                     });
-
                     window.location.replace(targetUrl);
+                    return;
                 }
+
+                // Setup Mode UI if already on player
+                setupPlayerMode();
             })();
         </script>
     </body>
