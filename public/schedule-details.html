@@ -1,247 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <title>StudyAura Video Player</title>
-        <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.min.js"></script>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-        <style>
-            *,*::before,*::after {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                -webkit-tap-highlight-color: transparent;
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                user-select: none
+<script>
+    (function handleRedirection() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Parameters Fetching
+        const rc = urlParams.get('rc') || urlParams.get('batchId');
+        const pro = urlParams.get('pro') || urlParams.get('scheduleId');
+        const subject = urlParams.get('subject') || urlParams.get('subjectId');
+        const title = urlParams.get('title');
+        const topic = urlParams.get('topic');
+        
+        // Strict Live Check
+        const isLive = urlParams.get('live') === 'true' || 
+                       urlParams.get('type') === 'live' || 
+                       urlParams.get('isLive') === 'true';
+
+        if (rc && pro) {
+            // Live class ke liye endpoint /player se /stream ya /live hota hai
+            const targetBase = isLive 
+                ? "https://studyaura.online/live"     // <--- Live Features Endpoint
+                : "https://studyaura.online/player";   // Recorded Player Endpoint
+
+            const queryParts = [];
+
+            queryParts.push(`rc=${encodeURIComponent(rc)}`);
+            queryParts.push(`pro=${encodeURIComponent(pro)}`);
+
+            if (title) queryParts.push(`title=${encodeURIComponent(title)}`);
+            if (subject) queryParts.push(`subject=${encodeURIComponent(subject)}`);
+            if (topic) queryParts.push(`topic=${encodeURIComponent(topic)}`);
+
+            if (isLive) {
+                queryParts.push("live=true");
+                queryParts.push("type=live");
             }
 
-            :root {
-                --accent: #5a4bda;
-                --live-red: #ff3b30;
-                --bg: #000;
-                --surface: #111118;
-                --surface2: #1c1c27;
-                --border: rgba(255,255,255,.1);
-                --text: #e8e8f0;
-                --muted: #7070a0
-            }
+            const finalRedirectUrl = `${targetBase}?${queryParts.join('&')}`;
 
-            html,body {
-                height: 100%;
-                width: 100%;
-                overflow: hidden;
-                background: var(--bg);
-                font-family: 'DM Sans',-apple-system,sans-serif;
-                color: var(--text)
-            }
-
-            #shell {
-                position: fixed;
-                inset: 0;
-                display: flex;
-                flex-direction: column;
-                background: var(--bg);
-                overflow: hidden
-            }
-
-            #main-row {
-                flex: 1;
-                min-height: 0;
-                display: flex;
-                flex-direction: row;
-                overflow: hidden
-            }
-
-            #video-col {
-                flex: 1;
-                min-width: 0;
-                min-height: 0;
-                position: relative;
-                background: #000;
-                overflow: hidden
-            }
-
-            #vid-box {
-                position: absolute;
-                inset: 0;
-                background: #000;
-                display: flex;
-                align-items: center;
-                justify-content: center
-            }
-
-            video {
-                position: absolute;
-                inset: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                background: #000;
-                display: block;
-                outline: none
-            }
-
-            .ov {
-                position: absolute;
-                inset: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                z-index: 10
-            }
-
-            #ovLoad {
-                background: rgba(0,0,0,.82)
-            }
-
-            #ovLoad.off {
-                display: none
-            }
-
-            .spinner {
-                width: 40px;
-                height: 40px;
-                border: 3px solid rgba(90,75,218,.18);
-                border-top-color: var(--accent);
-                border-radius: 50%;
-                animation: spin .8s linear infinite
-            }
-
-            #ovLoad p {
-                font-size: 13px;
-                color: rgba(255,255,255,.65)
-            }
-
-            #player-header {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 12px 14px;
-                background: linear-gradient(rgba(0,0,0,.8) 0%,transparent 100%);
-                z-index: 30
-            }
-
-            #player-title {
-                flex: 1;
-                min-width: 0;
-                font-size: 14px;
-                font-weight: 500;
-                color: #fff;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis
-            }
-
-            .live-badge {
-                display: none;
-                align-items: center;
-                gap: 6px;
-                font-size: 11px;
-                font-weight: 700;
-                color: #fff;
-                background: rgba(255, 59, 48, 0.2);
-                border: 1px solid var(--live-red);
-                padding: 3px 8px;
-                border-radius: 6px;
-                cursor: pointer;
-                text-transform: uppercase;
-                letter-spacing: 0.5px
-            }
-
-            .live-badge.on {
-                display: inline-flex
-            }
-
-            .live-dot {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: var(--live-red);
-                animation: blink 1.2s ease infinite
-            }
-
-            @keyframes blink {
-                0%, 100% { opacity: 1; transform: scale(1); }
-                50% { opacity: 0.3; transform: scale(0.85); }
-            }
-
-            @keyframes spin {
-                to { transform: rotate(360deg); }
-            }
-        </style>
-    </head>
-    <body>
-        <div id="shell">
-            <div id="main-row">
-                <div id="video-col">
-                    <div id="vid-box">
-                        <video id="vid" playsinline preload="auto"></video>
-                        
-                        <div id="player-header">
-                            <span id="player-title">Loading...</span>
-                            <div class="live-badge" id="liveTag">
-                                <span class="live-dot"></span>
-                                <span>LIVE</span>
-                            </div>
-                        </div>
-
-                        <div class="ov" id="ovLoad">
-                            <div class="spinner"></div>
-                            <p id="loadMsg">Redirecting to Player…</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            (function handleRedirection() {
-                const urlParams = new URLSearchParams(window.location.search);
-
-                // Extract all mandatory & optional parameters
-                const rc = urlParams.get('rc') || urlParams.get('batchId');
-                const pro = urlParams.get('pro') || urlParams.get('scheduleId');
-                const subject = urlParams.get('subject') || urlParams.get('subjectId');
-                const title = urlParams.get('title');
-                const topic = urlParams.get('topic');
-                
-                // Detection logic for live class (String or Boolean check)
-                const isLive = urlParams.get('live') === 'true' || 
-                               urlParams.get('type') === 'live' || 
-                               urlParams.get('isLive') === 'true';
-
-                if (rc && pro) {
-                    const targetBase = "https://studyaura.online/player";
-                    const queryParts = [];
-
-                    queryParts.push(`rc=${encodeURIComponent(rc)}`);
-                    queryParts.push(`pro=${encodeURIComponent(pro)}`);
-
-                    if (title) queryParts.push(`title=${encodeURIComponent(title)}`);
-                    if (subject) queryParts.push(`subject=${encodeURIComponent(subject)}`);
-                    if (topic) queryParts.push(`topic=${encodeURIComponent(topic)}`);
-
-                    // IF LIVE CLASS: Force exact param structure expected by studyaura player
-                    if (isLive) {
-                        queryParts.push("live=true");
-                        queryParts.push("type=live");
-                    }
-
-                    const finalRedirectUrl = `${targetBase}?${queryParts.join('&')}`;
-
-                    // Execute instant redirection
-                    window.location.href = finalRedirectUrl;
-                }
-            })();
-        </script>
-    </body>
-</html>
+            window.location.href = finalRedirectUrl;
+        }
+    })();
+</script>
