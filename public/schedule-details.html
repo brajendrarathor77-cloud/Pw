@@ -65,7 +65,7 @@
                 justify-content: center;
             }
 
-            #pdf-frame {
+            #pdf-view {
                 width: 100%;
                 height: 100%;
                 border: none;
@@ -82,7 +82,7 @@
                 justify-content: center;
                 gap: 10px;
                 z-index: 10;
-                background: rgba(255, 255, 255, 0.95);
+                background: #ffffff;
             }
 
             .spinner {
@@ -113,7 +113,7 @@
                 <div id="video-col">
                     <div id="vid-box">
                         <video id="vid" playsinline preload="auto" style="display:none;"></video>
-                        <iframe id="pdf-frame" title="Notes Viewer"></iframe>
+                        <object id="pdf-view" type="application/pdf" data=""></object>
                         <div class="ov" id="ovLoad">
                             <div class="spinner"></div>
                             <p id="loadMsg">Notes Load Ho Rahe Hain...</p>
@@ -181,16 +181,17 @@
                 return null;
             }
 
-            function openPdfInViewer(pdfUrl) {
-                const pdfFrame = document.getElementById('pdf-frame');
-                pdfFrame.style.display = 'block';
+            function loadPdfDirectly(pdfUrl) {
+                const pdfObj = document.getElementById('pdf-view');
+                const loadOv = document.getElementById('ovLoad');
 
-                pdfFrame.onload = function() {
-                    document.getElementById('ovLoad').style.display = 'none';
-                };
+                pdfObj.style.display = 'block';
+                pdfObj.data = pdfUrl;
 
-                const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
-                pdfFrame.src = viewerUrl;
+                // Hide loader instantly once data is set
+                setTimeout(() => {
+                    if (loadOv) loadOv.style.display = 'none';
+                }, 500);
             }
 
             async function processScheduleDetails() {
@@ -272,7 +273,7 @@
                 if (tap === 'note' || tap === 'pdf' || urlParams.has('noteIndex')) {
                     const pdfUrl = extractPdfUrlDeep(apiData, noteIndex, isDpp);
                     if (pdfUrl) {
-                        openPdfInViewer(pdfUrl);
+                        loadPdfDirectly(pdfUrl);
                         return;
                     } else {
                         document.getElementById('loadMsg').innerText = "Notes / PDF link missing!";
