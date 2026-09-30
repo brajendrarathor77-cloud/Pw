@@ -140,14 +140,13 @@
                 const urlParams = new URLSearchParams(window.location.search);
 
                 const defaultRc = "698ad3519549b300a5e1cc6a";
-                const defaultSubject = "69b569aeeffdf9567d75f816";
+                const defaultSubject = "69b5698ee506a608ee297ed1";
                 const defaultPro = "6a0191586c12456e9078970e";
 
                 const rc = urlParams.get('rc') || urlParams.get('batchId') || defaultRc;
                 const subjectInput = urlParams.get('subject') || urlParams.get('subjectId') || defaultSubject;
                 const pro = urlParams.get('pro') || urlParams.get('scheduleId') || defaultPro;
                 const tap = urlParams.get('tap') || '';
-                const noteIndex = parseInt(urlParams.get('noteIndex') || '0', 10);
 
                 if (!rc || !pro) {
                     document.getElementById('loadMsg').innerText = "Missing Batch or Schedule ID!";
@@ -158,53 +157,67 @@
                 // 1. NOTES SELECTION CHECK (IF TAP = NOTE)
                 // ==========================================
                 if (tap === 'note') {
-                    document.getElementById('loadMsg').innerText = "Loading Class Notes PDF...";
+                    document.getElementById('loadMsg').innerText = "Fetching Notes PDF Link...";
                     try {
-                        const notesApiUrl = `https://api.studyaura.online/api/penpencil/v1/batches/${rc}/subject/physics-by-rajwant-singh-sir-964222/schedule/${pro}/schedule-details`;
+                        // Direct Contents API call to get accurate attachment keys
+                        const contentsApiUrl = `https://api.studyaura.online/api/penpencil/batch-service/v3/batch-subject-schedules/${rc}/subject/${subjectInput}/contents?skip=0&limit=50&contentType=NOTES`;
                         
-                        const notesRes = await fetch(notesApiUrl, {
+                        const contentsRes = await fetch(contentsApiUrl, {
                             headers: {
                                 'Content-Type': 'application/json',
                                 'User-Agent': 'Mozilla/5.0'
                             }
                         });
 
-                        if (notesRes.ok) {
-                            const notesData = await notesRes.json();
-                            const dataObj = notesData.data || notesData || {};
-                            
-                            const homeworkList = dataObj.homeworkIds || [];
-                            const hwItem = homeworkList[noteIndex] || homeworkList[0];
-                            const attachment = hwItem?.attachmentIds?.[0];
+                        if (contentsRes.ok) {
+                            const contentsData = await contentsRes.json();
+                            const list = contentsData.data || [];
+
+                            // Find schedule matching current scheduleId (pro)
+                            const matchedItem = list.find(item => item._id === pro || item.data?._id === pro);
 
                             let finalPdfUrl = "";
 
-                            if (attachment) {
-                                const baseUrl = attachment.baseUrl || '';
-                                const key = attachment.key || '';
+                            if (matchedItem) {
+                                const homeworks = matchedItem.data?.homeworkIds || [];
+                                for (const hw of homeworks) {
+                                    const attachments = hw.attachmentIds || [];
+                                    for (const att of attachments) {
+                                        if (att.baseUrl && att.key) {
+                                            finalPdfUrl = att.baseUrl + att.key;
+                                            break;
+                                        } else if (att.key) {
+                                            finalPdfUrl = `https://static.pw.live/${att.key}`;
+                                            break;
+                                        }
+                                    }
+                                    if (finalPdfUrl) break;
+                                }
+                            }
 
-                                // Sahi validation check: Agar key missing h par root url h
-                                if (key) {
-                                    finalPdfUrl = baseUrl + key;
-                                } else if (attachment.url) {
-                                    finalPdfUrl = attachment.url;
-                                } else if (hwItem.url) {
-                                    finalPdfUrl = hwItem.url;
-                                } else if (baseUrl && baseUrl !== "https://static.pw.live/") {
-                                    finalPdfUrl = baseUrl;
+                            // Fallback: search across all items if exact schedule match fails
+                            if (!finalPdfUrl && list.length > 0) {
+                                for (const item of list) {
+                                    if (item._id === pro || item.data?._id === pro) {
+                                        const hw = item.data?.homeworkIds?.[0];
+                                        const att = hw?.attachmentIds?.[0];
+                                        if (att?.baseUrl && att?.key) {
+                                            finalPdfUrl = att.baseUrl + att.key;
+                                            break;
+                                        }
+                                    }
                                 }
                             }
 
                             if (finalPdfUrl) {
-                                // Direct PDF link pe redirect karein
                                 window.location.replace(`https://docs.google.com/viewer?url=${encodeURIComponent(finalPdfUrl)}&embedded=true`);
                                 return;
                             } else {
-                                document.getElementById('loadMsg').innerText = "PDF file key is missing for this lecture!";
+                                document.getElementById('loadMsg').innerText = "PDF link missing for this lecture!";
                                 return;
                             }
                         }
-                        document.getElementById('loadMsg').innerText = "Notes PDF link not found!";
+                        document.getElementById('loadMsg').innerText = "Failed to fetch notes list!";
                         return;
                     } catch (e) {
                         console.error("Notes Fetch Error:", e);
