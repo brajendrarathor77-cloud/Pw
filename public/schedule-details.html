@@ -147,35 +147,59 @@
                     .replace(/-+$/, '');
             }
 
-            function extractPdfUrl(data, noteIndex = 0, isDpp = false) {
+            // Deep search helper to find any valid PDF URL or Object inside API response
+            function extractPdfUrlDeep(data, noteIndex = 0, isDpp = false) {
                 if (!data) return null;
 
-                // Checking DPP attachments or Notes attachments
-                let noteList = [];
+                let allPdfs = [];
 
-                if (isDpp && data.dppHomeworkIds) {
-                    noteList = data.dppHomeworkIds;
-                } else if (data.homeworkIds) {
-                    noteList = data.homeworkIds;
-                } else if (data.attachments) {
-                    noteList = data.attachments;
-                } else if (data.notes) {
-                    noteList = data.notes;
+                function traverse(obj) {
+                    if (!obj) return;
+
+                    if (typeof obj === 'string') {
+                        if (obj.startsWith('http') && (obj.includes('.pdf') || obj.includes('pdf') || obj.includes('penpencil'))) {
+                            allPdfs.push(obj);
+                        }
+                        return;
+                    }
+
+                    if (typeof obj === 'object') {
+                        // Check if object has baseUrl + key
+                        if (obj.baseUrl && obj.key) {
+                            allPdfs.push(obj.baseUrl + obj.key);
+                        }
+                        // Check standard URL fields
+                        if (obj.attachmentUrl) allPdfs.push(obj.attachmentUrl);
+                        if (obj.solutionPath) allPdfs.push(obj.solutionPath);
+                        if (obj.pdfUrl) allPdfs.push(obj.pdfUrl);
+                        if (obj.fileUrl) allPdfs.push(obj.fileUrl);
+                        if (obj.url && typeof obj.url === 'string' && obj.url.startsWith('http')) {
+                            allPdfs.push(obj.url);
+                        }
+
+                        // Recursively check array/object properties
+                        for (let key in obj) {
+                            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                                if (isDpp && (key.toLowerCase().includes('dpp') || key.toLowerCase().includes('homework'))) {
+                                    traverse(obj[key]);
+                                } else if (!isDpp && !key.toLowerCase().includes('dpp')) {
+                                    traverse(obj[key]);
+                                } else {
+                                    traverse(obj[key]);
+                                }
+                            }
+                        }
+                    }
                 }
 
-                if (Array.isArray(noteList) && noteList.length > 0) {
-                    const item = noteList[noteIndex] || noteList[0];
-                    if (typeof item === 'string') return item;
-                    if (item.attachmentUrl) return item.attachmentUrl;
-                    if (item.baseUrl && item.key) return item.baseUrl + item.key;
-                    if (item.url) return item.url;
-                    if (item.link) return item.link;
-                }
+                traverse(data);
 
-                // Single field checks
-                if (data.attachmentUrl) return data.attachmentUrl;
-                if (data.noteUrl) return data.noteUrl;
-                if (data.pdfUrl) return data.pdfUrl;
+                // Filter out duplicates and empty strings
+                allPdfs = [...new Set(allPdfs)].filter(url => typeof url === 'string' && url.startsWith('http'));
+
+                if (allPdfs.length > 0) {
+                    return allPdfs[noteIndex] || allPdfs[0];
+                }
 
                 return null;
             }
@@ -260,9 +284,9 @@
                     console.warn("API check error:", e);
                 }
 
-                // CHECK: Agar user note / pdf open kar raha hai (`tap=note` ya `noteIndex` available ho)
+                // Check if user is trying to open notes/PDF
                 if (tap === 'note' || tap === 'pdf' || urlParams.has('noteIndex')) {
-                    const pdfUrl = extractPdfUrl(apiData, noteIndex, isDpp);
+                    const pdfUrl = extractPdfUrlDeep(apiData, noteIndex, isDpp);
                     
                     if (pdfUrl) {
                         document.getElementById('ovLoad').style.display = 'none';
@@ -271,12 +295,12 @@
                         const pdfFrame = document.getElementById('pdf-frame');
                         pdfFrame.style.display = 'block';
                         
-                        // Google Docs Viewer se cross-origin PDF render karne ke liye
+                        // Direct redirection or rendering inside viewer
                         const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
                         pdfFrame.src = viewerUrl;
-                        return; // Video redirection ko skip karein
+                        return;
                     } else {
-                        document.getElementById('loadMsg').innerText = "Notes / PDF not found in schedule data!";
+                        document.getElementById('loadMsg').innerText = "Notes / PDF link not found in API response!";
                         return;
                     }
                 }
