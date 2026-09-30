@@ -25,7 +25,9 @@
                 --surface2: #1c1c27;
                 --border: rgba(255,255,255,.1);
                 --text: #e8e8f0;
-                --muted: #7070a0
+                --muted: #7070a0;
+                --note: #3ecfcf;
+                --dpp: #ff9f43
             }
 
             html,body {
@@ -72,18 +74,6 @@
                 justify-content: center
             }
 
-            video {
-                position: absolute;
-                inset: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                background: #000;
-                display: block;
-                outline: none;
-                pointer-events: none
-            }
-
             .ov {
                 position: absolute;
                 inset: 0;
@@ -114,7 +104,9 @@
             }
 
             @keyframes spin {
-                to { transform: rotate(360deg); }
+                to {
+                    transform: rotate(360deg)
+                }
             }
         </style>
     </head>
@@ -126,7 +118,7 @@
                         <video id="vid" playsinline preload="auto"></video>
                         <div class="ov" id="ovLoad">
                             <div class="spinner"></div>
-                            <p id="loadMsg">Redirecting to Player...</p>
+                            <p id="loadMsg">Detecting Live Stream & Slugs...</p>
                         </div>
                     </div>
                 </div>
@@ -134,42 +126,119 @@
         </div>
 
         <script>
-            (function redirectToNewPlayer() {
+            function slugify(text) {
+                if (!text) return '';
+                return text.toString().toLowerCase()
+                    .replace(/\s+/g, '-')
+                    .replace(/[^\w\-]+/g, '')
+                    .replace(/\-\-+/g, '-')
+                    .replace(/^-+/, '')
+                    .replace(/-+$/, '');
+            }
+
+            async function processScheduleDetails() {
                 const urlParams = new URLSearchParams(window.location.search);
-                
-                // Fetch required parameters
-                const rc = urlParams.get('batchId') || urlParams.get('rc');
-                const pro = urlParams.get('scheduleId') || urlParams.get('pro');
-                const subject = urlParams.get('subjectId') || urlParams.get('subject');
-                const title = urlParams.get('title') || document.title;
-                const topic = urlParams.get('topic');
 
-                // Live class detection check
-                const isLive = urlParams.get('live') === 'true' || 
-                               urlParams.get('type') === 'live' || 
-                               urlParams.get('isLive') === 'true';
+                const defaultRc = "698ad3519549b300a5e1cc6a";
+                const defaultSubject = "69b569aeeffdf9567d75f816";
+                const defaultPro = "6a0191586c12456e9078970e";
 
-                if (rc && pro) {
-                    const baseUrl = "https://studyaura.online/player";
-                    const params = new URLSearchParams();
+                const rc = urlParams.get('rc') || urlParams.get('batchId') || defaultRc;
+                const subjectInput = urlParams.get('subject') || urlParams.get('subjectId') || defaultSubject;
+                const pro = urlParams.get('pro') || urlParams.get('scheduleId') || defaultPro;
 
-                    // Standard parameters
-                    params.set('rc', rc);
-                    params.set('pro', pro);
-                    if (title) params.set('title', title);
-                    if (subject) params.set('subject', subject);
+                if (!rc || !pro) {
+                    document.getElementById('loadMsg').innerText = "Missing Batch or Schedule ID!";
+                    return;
+                }
 
-                    // Append Live Class Specific Parameters
-                    if (isLive) {
-                        if (topic) params.set('topic', topic);
-                        params.set('live', 'true');
-                        params.set('type', 'live');
+                let isLive = urlParams.get('live') === 'true' || urlParams.get('type') === 'live';
+                let title = urlParams.get('title') || urlParams.get('t') || '';
+                let topicRaw = urlParams.get('topic') || '';
+                let subjectSlug = subjectInput;
+
+                const v1ScheduleApi = `https://api.studyaura.online/api/penpencil/v1/batches/${rc}/subject/${subjectInput}/schedule/${pro}/schedule-details`;
+                const v2TodaysApi = `https://api.studyaura.online/api/penpencil/v2/batches/${rc}/todays-schedule?batchId=${rc}`;
+
+                try {
+                    const [resV1, resV2] = await Promise.allSettled([
+                        fetch(v1ScheduleApi),
+                        fetch(v2TodaysApi)
+                    ]);
+
+                    // 1. Fetch from V1 API
+                    if (resV1.status === 'fulfilled' && resV1.value.ok) {
+                        const json = await resV1.value.json();
+                        const data = json.data || json || {};
+
+                        // Multi-check for title & topic keys inside API
+                        if (data.title) title = data.title;
+                        else if (data.topic) title = data.topic;
+                        else if (data.name) title = data.name;
+
+                        if (data.topic) topicRaw = data.topic;
+                        else if (data.topicName) topicRaw = data.topicName;
+
+                        if (data.subjectId) {
+                            if (typeof data.subjectId === 'object') {
+                                subjectSlug = data.subjectId.slug || slugify(data.subjectId.name) || subjectInput;
+                            }
+                        }
+
+                        const statusUpper = String(data.status || '').toUpperCase();
+                        if (statusUpper === 'LIVE' || statusUpper === 'UPCOMING' || data.isLive === true || data.isLiveStream === true) {
+                            isLive = true;
+                        }
                     }
 
-                    const targetUrl = `${baseUrl}?${params.toString()}`;
-                    window.location.replace(targetUrl);
+                    // 2. Fetch from V2 API
+                    if (resV2.status === 'fulfilled' && resV2.value.ok) {
+                        const json = await resV2.value.json();
+                        const list = json.data || json || [];
+                        if (Array.isArray(list)) {
+                            const match = list.find(i => i._id === pro || i.scheduleId === pro || i.id === pro);
+                            if (match) {
+                                isLive = true;
+                                if (match.title) title = match.title;
+                                if (match.topic) topicRaw = match.topic;
+                                if (match.subjectId && match.subjectId.name) {
+                                    subjectSlug = slugify(match.subjectId.name);
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn("API check error:", e);
                 }
-            })();
+
+                // Fallback parsing if topic or title missing
+                if (!topicRaw && title) {
+                    topicRaw = title.split(':')[0].split('-')[0].trim();
+                }
+                if (!title && topicRaw) {
+                    title = topicRaw;
+                }
+
+                const baseUrl = "https://studyaura.online/player";
+                const params = new URLSearchParams();
+
+                // Double Redirection Support for Title (Dono format add kar diye hain taaki player title ko skip na kare)
+                params.set('rc', rc);
+                params.set('pro', pro);
+                params.set('title', title);
+                params.set('t', title); // Alternate Key
+                params.set('subject', subjectSlug || subjectInput);
+                params.set('topic', topicRaw || title);
+                
+                if (isLive) {
+                    params.set('live', 'true');
+                    params.set('type', 'live');
+                }
+
+                window.location.replace(`${baseUrl}?${params.toString()}`);
+            }
+
+            processScheduleDetails();
         </script>
     </body>
 </html>
