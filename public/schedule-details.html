@@ -4,7 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
         <title>StudyAura Details & Notes</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
         <style>
             *,*::before,*::after {
@@ -23,42 +24,57 @@
             html, body {
                 height: 100%;
                 width: 100%;
-                background: #ffffff !important;
+                background: #ffffff;
                 font-family: 'DM Sans', -apple-system, sans-serif;
                 color: var(--text);
-                overflow-x: hidden;
+                overflow: hidden;
             }
 
             #shell {
-                min-height: 100vh;
-                width: 100%;
-                background: #ffffff !important;
+                position: fixed;
+                inset: 0;
                 display: flex;
                 flex-direction: column;
+                background: #ffffff;
+                overflow: hidden;
             }
 
-            #pdf-container {
-                width: 100%;
+            #main-row {
+                flex: 1;
+                min-height: 0;
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
+                overflow: hidden;
+            }
+
+            #video-col {
+                flex: 1;
+                min-width: 0;
+                min-height: 0;
+                position: relative;
+                background: #ffffff;
+                overflow: hidden;
+            }
+
+            #vid-box {
+                position: absolute;
+                inset: 0;
+                background: #ffffff;
+                display: flex;
                 align-items: center;
-                gap: 12px;
-                padding: 10px 0;
-                background: #ffffff !important;
-                filter: invert(0.92) hue-rotate(180deg) contrast(1.1);
-                -webkit-filter: invert(0.92) hue-rotate(180deg) contrast(1.1);
+                justify-content: center;
             }
 
-            .pdf-page-canvas {
-                width: 100% !important;
-                max-width: 900px;
-                height: auto !important;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                background: #ffffff !important;
+            #pdf-view {
+                width: 100%;
+                height: 100%;
+                border: none;
+                display: none;
+                background: #ffffff;
             }
 
             .ov {
-                position: fixed;
+                position: absolute;
                 inset: 0;
                 display: flex;
                 flex-direction: column;
@@ -66,7 +82,7 @@
                 justify-content: center;
                 gap: 10px;
                 z-index: 10;
-                background: #ffffff !important;
+                background: #ffffff;
             }
 
             .spinner {
@@ -93,18 +109,21 @@
     </head>
     <body>
         <div id="shell">
-            <div id="pdf-container"></div>
-            <div class="ov" id="ovLoad">
-                <div class="spinner"></div>
-                <p id="loadMsg">Notes Load Ho Rahe Hain...</p>
+            <div id="main-row">
+                <div id="video-col">
+                    <div id="vid-box">
+                        <video id="vid" playsinline preload="auto" style="display:none;"></video>
+                        <object id="pdf-view" type="application/pdf" data=""></object>
+                        <div class="ov" id="ovLoad">
+                            <div class="spinner"></div>
+                            <p id="loadMsg">Notes Load Ho Rahe Hain...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <script>
-            if (window.pdfjsLib) {
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-            }
-
             function slugify(text) {
                 if (!text) return '';
                 return text.toString().toLowerCase()
@@ -141,7 +160,13 @@
 
                         for (let key in obj) {
                             if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                                traverse(obj[key]);
+                                if (isDpp && (key.toLowerCase().includes('dpp') || key.toLowerCase().includes('homework'))) {
+                                    traverse(obj[key]);
+                                } else if (!isDpp && !key.toLowerCase().includes('dpp')) {
+                                    traverse(obj[key]);
+                                } else {
+                                    traverse(obj[key]);
+                                }
                             }
                         }
                     }
@@ -156,48 +181,17 @@
                 return null;
             }
 
-            async function renderPdfNative(pdfUrl) {
-                const container = document.getElementById('pdf-container');
+            function loadPdfDirectly(pdfUrl) {
+                const pdfObj = document.getElementById('pdf-view');
                 const loadOv = document.getElementById('ovLoad');
 
-                try {
-                    const loadingTask = pdfjsLib.getDocument(pdfUrl);
-                    const pdf = await loadingTask.promise;
+                pdfObj.style.display = 'block';
+                pdfObj.data = pdfUrl;
 
-                    container.innerHTML = '';
-
-                    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                        const page = await pdf.getPage(pageNum);
-                        const viewport = page.getViewport({ scale: 1.5 });
-
-                        const canvas = document.createElement('canvas');
-                        canvas.className = 'pdf-page-canvas';
-                        const context = canvas.getContext('2d');
-
-                        canvas.height = viewport.height;
-                        canvas.width = viewport.width;
-
-                        container.appendChild(canvas);
-
-                        await page.render({
-                            canvasContext: context,
-                            viewport: viewport
-                        }).promise;
-                    }
-
+                // Hide loader instantly once data is set
+                setTimeout(() => {
                     if (loadOv) loadOv.style.display = 'none';
-                } catch (error) {
-                    console.error("PDF render failed, using fallback:", error);
-                    // Fallback to Google Docs Viewer if direct binary fetch fails
-                    const iframe = document.createElement('iframe');
-                    iframe.style.width = '100%';
-                    iframe.style.height = '100vh';
-                    iframe.style.border = 'none';
-                    iframe.src = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
-                    
-                    container.appendChild(iframe);
-                    if (loadOv) loadOv.style.display = 'none';
-                }
+                }, 500);
             }
 
             async function processScheduleDetails() {
@@ -279,7 +273,7 @@
                 if (tap === 'note' || tap === 'pdf' || urlParams.has('noteIndex')) {
                     const pdfUrl = extractPdfUrlDeep(apiData, noteIndex, isDpp);
                     if (pdfUrl) {
-                        renderPdfNative(pdfUrl);
+                        loadPdfDirectly(pdfUrl);
                         return;
                     } else {
                         document.getElementById('loadMsg').innerText = "Notes / PDF link missing!";
