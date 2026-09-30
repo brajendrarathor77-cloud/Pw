@@ -173,22 +173,35 @@
                             const notesData = await notesRes.json();
                             const dataObj = notesData.data || notesData || {};
                             
-                            // Extract homework or attachments
                             const homeworkList = dataObj.homeworkIds || [];
                             const hwItem = homeworkList[noteIndex] || homeworkList[0];
                             const attachment = hwItem?.attachmentIds?.[0];
 
-                            if (attachment) {
-                                let pdfUrl = attachment.baseUrl || '';
-                                if (attachment.key) {
-                                    pdfUrl += attachment.key; // Full PDF URL (baseUrl + key)
-                                }
+                            let finalPdfUrl = "";
 
-                                if (pdfUrl) {
-                                    // Redirect to PDF viewer directly
-                                    window.location.replace(`https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`);
-                                    return;
+                            if (attachment) {
+                                const baseUrl = attachment.baseUrl || '';
+                                const key = attachment.key || '';
+
+                                // Sahi validation check: Agar key missing h par root url h
+                                if (key) {
+                                    finalPdfUrl = baseUrl + key;
+                                } else if (attachment.url) {
+                                    finalPdfUrl = attachment.url;
+                                } else if (hwItem.url) {
+                                    finalPdfUrl = hwItem.url;
+                                } else if (baseUrl && baseUrl !== "https://static.pw.live/") {
+                                    finalPdfUrl = baseUrl;
                                 }
+                            }
+
+                            if (finalPdfUrl) {
+                                // Direct PDF link pe redirect karein
+                                window.location.replace(`https://docs.google.com/viewer?url=${encodeURIComponent(finalPdfUrl)}&embedded=true`);
+                                return;
+                            } else {
+                                document.getElementById('loadMsg').innerText = "PDF file key is missing for this lecture!";
+                                return;
                             }
                         }
                         document.getElementById('loadMsg').innerText = "Notes PDF link not found!";
@@ -217,7 +230,6 @@
                         fetch(v2TodaysApi)
                     ]);
 
-                    // Fetch from V1 API
                     if (resV1.status === 'fulfilled' && resV1.value.ok) {
                         const json = await resV1.value.json();
                         const data = json.data || json || {};
@@ -241,7 +253,6 @@
                         }
                     }
 
-                    // Fetch from V2 API
                     if (resV2.status === 'fulfilled' && resV2.value.ok) {
                         const json = await resV2.value.json();
                         const list = json.data || json || [];
