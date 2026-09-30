@@ -6,8 +6,6 @@
         <title>StudyAura Details & Notes</title>
         <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.min.js"></script>
-        <!-- PDF.js library for high quality rendering and zooming -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
         <style>
             *,*::before,*::after {
@@ -19,7 +17,7 @@
 
             :root {
                 --accent: #5a4bda;
-                --bg: #ffffff; /* White background for notes mode */
+                --bg: #ffffff;
                 --text: #1c1c27;
             }
 
@@ -29,7 +27,7 @@
                 background: #ffffff;
                 font-family: 'DM Sans', -apple-system, sans-serif;
                 color: var(--text);
-                overflow-x: hidden;
+                overflow: hidden;
             }
 
             #shell {
@@ -67,25 +65,12 @@
                 justify-content: center;
             }
 
-            /* Native Scrollable & Zoomable PDF Container */
-            #pdf-container {
+            #pdf-frame {
+                width: 100%;
+                height: 100%;
+                border: none;
                 display: none;
-                position: absolute;
-                inset: 0;
-                overflow: auto;
                 background: #ffffff;
-                -webkit-overflow-scrolling: touch;
-                padding: 10px 0;
-                text-align: center;
-            }
-
-            .pdf-page-canvas {
-                display: block;
-                margin: 10px auto;
-                background: #ffffff;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-                max-width: 98%;
-                height: auto !important;
             }
 
             .ov {
@@ -128,7 +113,7 @@
                 <div id="video-col">
                     <div id="vid-box">
                         <video id="vid" playsinline preload="auto" style="display:none;"></video>
-                        <div id="pdf-container"></div>
+                        <iframe id="pdf-frame" title="Notes Viewer"></iframe>
                         <div class="ov" id="ovLoad">
                             <div class="spinner"></div>
                             <p id="loadMsg">Notes Load Ho Rahe Hain...</p>
@@ -139,9 +124,6 @@
         </div>
 
         <script>
-            // Set PDF.js worker URL
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-
             function slugify(text) {
                 if (!text) return '';
                 return text.toString().toLowerCase()
@@ -199,47 +181,16 @@
                 return null;
             }
 
-            // PDF Render Function with High Quality Resolution
-            async function renderPdf(pdfUrl) {
-                const container = document.getElementById('pdf-container');
-                container.style.display = 'block';
+            function openPdfInViewer(pdfUrl) {
+                const pdfFrame = document.getElementById('pdf-frame');
+                pdfFrame.style.display = 'block';
 
-                // CORS proxy fallback if needed
-                const corsProxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(pdfUrl)}`;
-
-                try {
-                    let loadingTask = pdfjsLib.getDocument(pdfUrl);
-                    let pdf = await loadingTask.promise.catch(() => {
-                        // Retry with proxy if direct CORS fails
-                        return pdfjsLib.getDocument(corsProxyUrl).promise;
-                    });
-
+                pdfFrame.onload = function() {
                     document.getElementById('ovLoad').style.display = 'none';
+                };
 
-                    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                        const page = await pdf.getPage(pageNum);
-                        const canvas = document.createElement('canvas');
-                        canvas.className = 'pdf-page-canvas';
-                        container.appendChild(canvas);
-
-                        const viewport = page.getViewport({ scale: 1.8 }); // Higher resolution
-                        const context = canvas.getContext('2d');
-                        canvas.height = viewport.height;
-                        canvas.width = viewport.width;
-
-                        await page.render({
-                            canvasContext: context,
-                            viewport: viewport
-                        }).promise;
-                    }
-                } catch (err) {
-                    console.error("PDF Rendering Error:", err);
-                    document.getElementById('loadMsg').innerText = "PDF Viewer Fail! Direct link me open kar rahe hain...";
-                    // Fallback to Google Viewer if JS render fails
-                    setTimeout(() => {
-                        window.location.href = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
-                    }, 1200);
-                }
+                const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
+                pdfFrame.src = viewerUrl;
             }
 
             async function processScheduleDetails() {
@@ -318,11 +269,10 @@
                     console.warn("API check error:", e);
                 }
 
-                // Check if user is opening Notes
                 if (tap === 'note' || tap === 'pdf' || urlParams.has('noteIndex')) {
                     const pdfUrl = extractPdfUrlDeep(apiData, noteIndex, isDpp);
                     if (pdfUrl) {
-                        await renderPdf(pdfUrl);
+                        openPdfInViewer(pdfUrl);
                         return;
                     } else {
                         document.getElementById('loadMsg').innerText = "Notes / PDF link missing!";
@@ -330,7 +280,6 @@
                     }
                 }
 
-                // Redirect to Video Player if not notes
                 if (!topicRaw && title) topicRaw = title.split(':')[0].split('-')[0].trim();
                 if (!title && topicRaw) title = topicRaw;
 
