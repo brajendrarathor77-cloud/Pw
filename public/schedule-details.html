@@ -4,21 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
         <title>StudyAura Details & Notes</title>
-        <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.min.js"></script>
+        <!-- PDF.js Engine for Auto-Rendering without clicking Open -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
         <style>
-            *,*::before,*::after {
+            *, *::before, *::after {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
                 -webkit-tap-highlight-color: transparent;
-            }
-
-            :root {
-                --accent: #5a4bda;
-                --bg: #ffffff;
-                --text: #1c1c27;
             }
 
             html, body {
@@ -26,7 +20,6 @@
                 width: 100%;
                 background: #ffffff !important;
                 font-family: 'DM Sans', -apple-system, sans-serif;
-                color: var(--text);
                 overflow: hidden;
             }
 
@@ -61,20 +54,26 @@
                 position: absolute;
                 inset: 0;
                 background: #ffffff !important;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
-            /* Invert dark PDF background to clean white mode */
-            #pdf-view {
+            /* Container for Auto-rendered PDF pages */
+            #pdf-container {
                 width: 100%;
-                height: 100%;
-                border: none;
-                display: none;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                padding: 10px 0;
                 background: #ffffff !important;
-                filter: invert(0.92) hue-rotate(180deg) contrast(1.1); /* Converts dark background to bright white */
-                -webkit-filter: invert(0.92) hue-rotate(180deg) contrast(1.1);
+            }
+
+            canvas {
+                max-width: 100%;
+                height: auto !important;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                background: #ffffff !important;
             }
 
             .ov {
@@ -93,7 +92,7 @@
                 width: 40px;
                 height: 40px;
                 border: 3px solid rgba(90, 75, 218, 0.18);
-                border-top-color: var(--accent);
+                border-top-color: #5a4bda;
                 border-radius: 50%;
                 animation: spin 0.8s linear infinite;
             }
@@ -116,8 +115,7 @@
             <div id="main-row">
                 <div id="video-col">
                     <div id="vid-box">
-                        <video id="vid" playsinline preload="auto" style="display:none;"></video>
-                        <object id="pdf-view" type="application/pdf" data=""></object>
+                        <div id="pdf-container"></div>
                         <div class="ov" id="ovLoad">
                             <div class="spinner"></div>
                             <p id="loadMsg">Notes Load Ho Rahe Hain...</p>
@@ -128,6 +126,9 @@
         </div>
 
         <script>
+            // Set PDF.js Worker Location
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
             function slugify(text) {
                 if (!text) return '';
                 return text.toString().toLowerCase()
@@ -185,16 +186,49 @@
                 return null;
             }
 
-            function loadPdfDirectly(pdfUrl) {
-                const pdfObj = document.getElementById('pdf-view');
+            // Function to render all PDF pages directly into HTML canvas elements
+            async function renderPdfAutomatically(pdfUrl) {
+                const container = document.getElementById('pdf-container');
                 const loadOv = document.getElementById('ovLoad');
 
-                pdfObj.style.display = 'block';
-                pdfObj.data = pdfUrl;
+                try {
+                    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                    const pdf = await loadingTask.promise;
 
-                setTimeout(() => {
+                    // Hide overlay loader as soon as PDF is ready
                     if (loadOv) loadOv.style.display = 'none';
-                }, 500);
+
+                    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                        const page = await pdf.getPage(pageNum);
+                        const scale = 1.5; // High sharpness
+                        const viewport = page.getViewport({ scale: scale });
+
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        container.appendChild(canvas);
+
+                        const renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        await page.render(renderContext).promise;
+                    }
+                } catch (error) {
+                    console.error("PDF Auto-render error:", error);
+                    // Fallback to Google Docs viewer embedded directly without prompt
+                    const iframe = document.createElement('iframe');
+                    iframe.style.width = '100%';
+                    iframe.style.height = '100%';
+                    iframe.style.border = 'none';
+                    iframe.src = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
+                    
+                    container.innerHTML = '';
+                    container.appendChild(iframe);
+                    if (loadOv) loadOv.style.display = 'none';
+                }
             }
 
             async function processScheduleDetails() {
@@ -276,7 +310,7 @@
                 if (tap === 'note' || tap === 'pdf' || urlParams.has('noteIndex')) {
                     const pdfUrl = extractPdfUrlDeep(apiData, noteIndex, isDpp);
                     if (pdfUrl) {
-                        loadPdfDirectly(pdfUrl);
+                        renderPdfAutomatically(pdfUrl);
                         return;
                     } else {
                         document.getElementById('loadMsg').innerText = "Notes / PDF link missing!";
