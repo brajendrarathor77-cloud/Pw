@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <title>StudyAura Video Player & Notes</title>
+        <title>StudyAura Video Player</title>
         <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -140,99 +140,18 @@
                 const urlParams = new URLSearchParams(window.location.search);
 
                 const defaultRc = "698ad3519549b300a5e1cc6a";
-                const defaultSubject = "69b5698ee506a608ee297ed1";
+                const defaultSubject = "69b569aeeffdf9567d75f816";
                 const defaultPro = "6a0191586c12456e9078970e";
 
                 const rc = urlParams.get('rc') || urlParams.get('batchId') || defaultRc;
                 const subjectInput = urlParams.get('subject') || urlParams.get('subjectId') || defaultSubject;
                 const pro = urlParams.get('pro') || urlParams.get('scheduleId') || defaultPro;
-                const tap = urlParams.get('tap') || '';
-                const chapterId = urlParams.get('chapterId') || urlParams.get('tagId') || '';
 
                 if (!rc || !pro) {
                     document.getElementById('loadMsg').innerText = "Missing Batch or Schedule ID!";
                     return;
                 }
 
-                // ==========================================
-                // 1. NOTES SELECTION CHECK (IF TAP = NOTE)
-                // ==========================================
-                if (tap === 'note') {
-                    document.getElementById('loadMsg').innerText = "Fetching Notes PDF...";
-                    
-                    try {
-                        let finalPdfUrl = "";
-
-                        // Attempt 1: Fetch via Schedule Details API
-                        try {
-                            const detailsUrl = `https://api.studyaura.online/api/penpencil/v1/batches/${rc}/subject/physics-by-rajwant-singh-sir-964222/schedule/${pro}/schedule-details`;
-                            const detRes = await fetch(detailsUrl);
-                            if (detRes.ok) {
-                                const detJson = await detRes.json();
-                                const hw = detJson?.data?.homeworkIds?.[0];
-                                const att = hw?.attachmentIds?.[0];
-                                if (att?.baseUrl && att?.key) {
-                                    finalPdfUrl = att.baseUrl + att.key;
-                                }
-                            }
-                        } catch(e) {
-                            console.warn("Details API check failed", e);
-                        }
-
-                        // Attempt 2: Fetch via Contents API with/without chapter filter
-                        if (!finalPdfUrl) {
-                            let contentsUrl = `https://api.studyaura.online/api/penpencil/batch-service/v3/batch-subject-schedules/${rc}/subject/${subjectInput}/contents?skip=0&limit=50&contentType=NOTES`;
-                            if (chapterId) {
-                                contentsUrl += `&tagId=${chapterId}`;
-                            }
-
-                            const contentsRes = await fetch(contentsUrl);
-                            if (contentsRes.ok) {
-                                const contentsData = await contentsRes.json();
-                                const list = contentsData.data || [];
-
-                                for (const item of list) {
-                                    const itemId = item._id || item.data?._id;
-                                    if (itemId === pro) {
-                                        const hwList = item.data?.homeworkIds || item.homeworkIds || [];
-                                        for (const hw of hwList) {
-                                            const attList = hw.attachmentIds || [];
-                                            for (const att of attList) {
-                                                if (att.baseUrl && att.key) {
-                                                    finalPdfUrl = att.baseUrl + att.key;
-                                                    break;
-                                                } else if (att.key) {
-                                                    finalPdfUrl = `https://static.pw.live/${att.key}`;
-                                                    break;
-                                                }
-                                            }
-                                            if (finalPdfUrl) break;
-                                        }
-                                    }
-                                    if (finalPdfUrl) break;
-                                }
-                            }
-                        }
-
-                        // Execute Redirect
-                        if (finalPdfUrl) {
-                            window.location.replace(`https://docs.google.com/viewer?url=${encodeURIComponent(finalPdfUrl)}&embedded=true`);
-                            return;
-                        } else {
-                            document.getElementById('loadMsg').innerText = "PDF link missing for this lecture!";
-                            return;
-                        }
-
-                    } catch (e) {
-                        console.error("Notes Fetch Error:", e);
-                        document.getElementById('loadMsg').innerText = "Error loading Notes PDF!";
-                        return;
-                    }
-                }
-
-                // ==========================================
-                // 2. DEFAULT VIDEO PLAYER REDIRECT LOGIC
-                // ==========================================
                 let isLive = urlParams.get('live') === 'true' || urlParams.get('type') === 'live';
                 let title = urlParams.get('title') || urlParams.get('t') || '';
                 let topicRaw = urlParams.get('topic') || '';
@@ -247,10 +166,12 @@
                         fetch(v2TodaysApi)
                     ]);
 
+                    // 1. Fetch from V1 API
                     if (resV1.status === 'fulfilled' && resV1.value.ok) {
                         const json = await resV1.value.json();
                         const data = json.data || json || {};
 
+                        // Multi-check for title & topic keys inside API
                         if (data.title) title = data.title;
                         else if (data.topic) title = data.topic;
                         else if (data.name) title = data.name;
@@ -270,6 +191,7 @@
                         }
                     }
 
+                    // 2. Fetch from V2 API
                     if (resV2.status === 'fulfilled' && resV2.value.ok) {
                         const json = await resV2.value.json();
                         const list = json.data || json || [];
@@ -289,6 +211,7 @@
                     console.warn("API check error:", e);
                 }
 
+                // Fallback parsing if topic or title missing
                 if (!topicRaw && title) {
                     topicRaw = title.split(':')[0].split('-')[0].trim();
                 }
@@ -299,10 +222,11 @@
                 const baseUrl = "https://studyaura.online/player";
                 const params = new URLSearchParams();
 
+                // Double Redirection Support for Title (Dono format add kar diye hain taaki player title ko skip na kare)
                 params.set('rc', rc);
                 params.set('pro', pro);
                 params.set('title', title);
-                params.set('t', title);
+                params.set('t', title); // Alternate Key
                 params.set('subject', subjectSlug || subjectInput);
                 params.set('topic', topicRaw || title);
                 
@@ -317,4 +241,4 @@
             processScheduleDetails();
         </script>
     </body>
-</html>
+</html> 
