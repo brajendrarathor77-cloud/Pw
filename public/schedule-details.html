@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <title>StudyAura Video Player</title>
+        <title>StudyAura Details & Notes</title>
         <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -100,7 +100,17 @@
 
             #ovLoad p {
                 font-size: 13px;
-                color: rgba(255,255,255,.65)
+                color: rgba(255,255,255,.65);
+                text-align: center;
+                padding: 0 15px;
+            }
+
+            #pdf-frame {
+                width: 100%;
+                height: 100%;
+                border: none;
+                display: none;
+                background: #ffffff;
             }
 
             @keyframes spin {
@@ -116,9 +126,10 @@
                 <div id="video-col">
                     <div id="vid-box">
                         <video id="vid" playsinline preload="auto"></video>
+                        <iframe id="pdf-frame" title="Notes Viewer"></iframe>
                         <div class="ov" id="ovLoad">
                             <div class="spinner"></div>
-                            <p id="loadMsg">Detecting Live Stream & Slugs...</p>
+                            <p id="loadMsg">Detecting Stream / Notes...</p>
                         </div>
                     </div>
                 </div>
@@ -136,6 +147,39 @@
                     .replace(/-+$/, '');
             }
 
+            function extractPdfUrl(data, noteIndex = 0, isDpp = false) {
+                if (!data) return null;
+
+                // Checking DPP attachments or Notes attachments
+                let noteList = [];
+
+                if (isDpp && data.dppHomeworkIds) {
+                    noteList = data.dppHomeworkIds;
+                } else if (data.homeworkIds) {
+                    noteList = data.homeworkIds;
+                } else if (data.attachments) {
+                    noteList = data.attachments;
+                } else if (data.notes) {
+                    noteList = data.notes;
+                }
+
+                if (Array.isArray(noteList) && noteList.length > 0) {
+                    const item = noteList[noteIndex] || noteList[0];
+                    if (typeof item === 'string') return item;
+                    if (item.attachmentUrl) return item.attachmentUrl;
+                    if (item.baseUrl && item.key) return item.baseUrl + item.key;
+                    if (item.url) return item.url;
+                    if (item.link) return item.link;
+                }
+
+                // Single field checks
+                if (data.attachmentUrl) return data.attachmentUrl;
+                if (data.noteUrl) return data.noteUrl;
+                if (data.pdfUrl) return data.pdfUrl;
+
+                return null;
+            }
+
             async function processScheduleDetails() {
                 const urlParams = new URLSearchParams(window.location.search);
 
@@ -146,6 +190,10 @@
                 const rc = urlParams.get('rc') || urlParams.get('batchId') || defaultRc;
                 const subjectInput = urlParams.get('subject') || urlParams.get('subjectId') || defaultSubject;
                 const pro = urlParams.get('pro') || urlParams.get('scheduleId') || defaultPro;
+
+                const tap = urlParams.get('tap');
+                const noteIndex = parseInt(urlParams.get('noteIndex') || '0', 10);
+                const isDpp = urlParams.get('isDpp') === 'true';
 
                 if (!rc || !pro) {
                     document.getElementById('loadMsg').innerText = "Missing Batch or Schedule ID!";
@@ -160,6 +208,8 @@
                 const v1ScheduleApi = `https://api.studyaura.online/api/penpencil/v1/batches/${rc}/subject/${subjectInput}/schedule/${pro}/schedule-details`;
                 const v2TodaysApi = `https://api.studyaura.online/api/penpencil/v2/batches/${rc}/todays-schedule?batchId=${rc}`;
 
+                let apiData = null;
+
                 try {
                     const [resV1, resV2] = await Promise.allSettled([
                         fetch(v1ScheduleApi),
@@ -169,24 +219,23 @@
                     // 1. Fetch from V1 API
                     if (resV1.status === 'fulfilled' && resV1.value.ok) {
                         const json = await resV1.value.json();
-                        const data = json.data || json || {};
+                        apiData = json.data || json || {};
 
-                        // Multi-check for title & topic keys inside API
-                        if (data.title) title = data.title;
-                        else if (data.topic) title = data.topic;
-                        else if (data.name) title = data.name;
+                        if (apiData.title) title = apiData.title;
+                        else if (apiData.topic) title = apiData.topic;
+                        else if (apiData.name) title = apiData.name;
 
-                        if (data.topic) topicRaw = data.topic;
-                        else if (data.topicName) topicRaw = data.topicName;
+                        if (apiData.topic) topicRaw = apiData.topic;
+                        else if (apiData.topicName) topicRaw = apiData.topicName;
 
-                        if (data.subjectId) {
-                            if (typeof data.subjectId === 'object') {
-                                subjectSlug = data.subjectId.slug || slugify(data.subjectId.name) || subjectInput;
+                        if (apiData.subjectId) {
+                            if (typeof apiData.subjectId === 'object') {
+                                subjectSlug = apiData.subjectId.slug || slugify(apiData.subjectId.name) || subjectInput;
                             }
                         }
 
-                        const statusUpper = String(data.status || '').toUpperCase();
-                        if (statusUpper === 'LIVE' || statusUpper === 'UPCOMING' || data.isLive === true || data.isLiveStream === true) {
+                        const statusUpper = String(apiData.status || '').toUpperCase();
+                        if (statusUpper === 'LIVE' || statusUpper === 'UPCOMING' || apiData.isLive === true || apiData.isLiveStream === true) {
                             isLive = true;
                         }
                     }
@@ -211,6 +260,27 @@
                     console.warn("API check error:", e);
                 }
 
+                // CHECK: Agar user note / pdf open kar raha hai (`tap=note` ya `noteIndex` available ho)
+                if (tap === 'note' || tap === 'pdf' || urlParams.has('noteIndex')) {
+                    const pdfUrl = extractPdfUrl(apiData, noteIndex, isDpp);
+                    
+                    if (pdfUrl) {
+                        document.getElementById('ovLoad').style.display = 'none';
+                        document.getElementById('vid').style.display = 'none';
+                        
+                        const pdfFrame = document.getElementById('pdf-frame');
+                        pdfFrame.style.display = 'block';
+                        
+                        // Google Docs Viewer se cross-origin PDF render karne ke liye
+                        const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
+                        pdfFrame.src = viewerUrl;
+                        return; // Video redirection ko skip karein
+                    } else {
+                        document.getElementById('loadMsg').innerText = "Notes / PDF not found in schedule data!";
+                        return;
+                    }
+                }
+
                 // Fallback parsing if topic or title missing
                 if (!topicRaw && title) {
                     topicRaw = title.split(':')[0].split('-')[0].trim();
@@ -222,11 +292,10 @@
                 const baseUrl = "https://studyaura.online/player";
                 const params = new URLSearchParams();
 
-                // Double Redirection Support for Title (Dono format add kar diye hain taaki player title ko skip na kare)
                 params.set('rc', rc);
                 params.set('pro', pro);
                 params.set('title', title);
-                params.set('t', title); // Alternate Key
+                params.set('t', title);
                 params.set('subject', subjectSlug || subjectInput);
                 params.set('topic', topicRaw || title);
                 
@@ -241,4 +310,4 @@
             processScheduleDetails();
         </script>
     </body>
-</html> 
+</html>
