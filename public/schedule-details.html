@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>StudyAura Details & Notes</title>
         <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.min.js"></script>
@@ -13,30 +13,21 @@
                 padding: 0;
                 box-sizing: border-box;
                 -webkit-tap-highlight-color: transparent;
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                user-select: none
             }
 
             :root {
                 --accent: #5a4bda;
-                --bg: #000;
-                --surface: #111118;
-                --surface2: #1c1c27;
-                --border: rgba(255,255,255,.1);
-                --text: #e8e8f0;
-                --muted: #7070a0;
-                --note: #3ecfcf;
-                --dpp: #ff9f43
+                --bg: #ffffff;
+                --text: #1c1c27;
             }
 
-            html,body {
+            html, body {
                 height: 100%;
                 width: 100%;
-                overflow: hidden;
                 background: var(--bg);
-                font-family: 'DM Sans',-apple-system,sans-serif;
-                color: var(--text)
+                font-family: 'DM Sans', -apple-system, sans-serif;
+                color: var(--text);
+                overflow: hidden;
             }
 
             #shell {
@@ -45,7 +36,7 @@
                 display: flex;
                 flex-direction: column;
                 background: var(--bg);
-                overflow: hidden
+                overflow: hidden;
             }
 
             #main-row {
@@ -53,7 +44,7 @@
                 min-height: 0;
                 display: flex;
                 flex-direction: row;
-                overflow: hidden
+                overflow: hidden;
             }
 
             #video-col {
@@ -62,7 +53,7 @@
                 min-height: 0;
                 position: relative;
                 background: #000;
-                overflow: hidden
+                overflow: hidden;
             }
 
             #vid-box {
@@ -71,7 +62,7 @@
                 background: #000;
                 display: flex;
                 align-items: center;
-                justify-content: center
+                justify-content: center;
             }
 
             .ov {
@@ -82,41 +73,29 @@
                 align-items: center;
                 justify-content: center;
                 gap: 10px;
-                z-index: 10
-            }
-
-            #ovLoad {
-                background: rgba(0,0,0,.82)
+                z-index: 10;
+                background: rgba(255, 255, 255, 0.95);
             }
 
             .spinner {
                 width: 40px;
                 height: 40px;
-                border: 3px solid rgba(90,75,218,.18);
+                border: 3px solid rgba(90, 75, 218, 0.18);
                 border-top-color: var(--accent);
                 border-radius: 50%;
-                animation: spin .8s linear infinite
+                animation: spin 0.8s linear infinite;
             }
 
-            #ovLoad p {
-                font-size: 13px;
-                color: rgba(255,255,255,.65);
+            #loadMsg {
+                font-size: 14px;
+                color: #555;
                 text-align: center;
                 padding: 0 15px;
-            }
-
-            #pdf-frame {
-                width: 100%;
-                height: 100%;
-                border: none;
-                display: none;
-                background: #ffffff;
+                font-weight: 500;
             }
 
             @keyframes spin {
-                to {
-                    transform: rotate(360deg)
-                }
+                to { transform: rotate(360deg); }
             }
         </style>
     </head>
@@ -125,11 +104,10 @@
             <div id="main-row">
                 <div id="video-col">
                     <div id="vid-box">
-                        <video id="vid" playsinline preload="auto"></video>
-                        <iframe id="pdf-frame" title="Notes Viewer"></iframe>
+                        <video id="vid" playsinline preload="auto" style="display:none;"></video>
                         <div class="ov" id="ovLoad">
                             <div class="spinner"></div>
-                            <p id="loadMsg">Detecting Stream / Notes...</p>
+                            <p id="loadMsg">Loading...</p>
                         </div>
                     </div>
                 </div>
@@ -147,10 +125,8 @@
                     .replace(/-+$/, '');
             }
 
-            // Deep search helper to find any valid PDF URL or Object inside API response
             function extractPdfUrlDeep(data, noteIndex = 0, isDpp = false) {
                 if (!data) return null;
-
                 let allPdfs = [];
 
                 function traverse(obj) {
@@ -164,11 +140,7 @@
                     }
 
                     if (typeof obj === 'object') {
-                        // Check if object has baseUrl + key
-                        if (obj.baseUrl && obj.key) {
-                            allPdfs.push(obj.baseUrl + obj.key);
-                        }
-                        // Check standard URL fields
+                        if (obj.baseUrl && obj.key) allPdfs.push(obj.baseUrl + obj.key);
                         if (obj.attachmentUrl) allPdfs.push(obj.attachmentUrl);
                         if (obj.solutionPath) allPdfs.push(obj.solutionPath);
                         if (obj.pdfUrl) allPdfs.push(obj.pdfUrl);
@@ -177,7 +149,6 @@
                             allPdfs.push(obj.url);
                         }
 
-                        // Recursively check array/object properties
                         for (let key in obj) {
                             if (Object.prototype.hasOwnProperty.call(obj, key)) {
                                 if (isDpp && (key.toLowerCase().includes('dpp') || key.toLowerCase().includes('homework'))) {
@@ -193,14 +164,11 @@
                 }
 
                 traverse(data);
-
-                // Filter out duplicates and empty strings
                 allPdfs = [...new Set(allPdfs)].filter(url => typeof url === 'string' && url.startsWith('http'));
 
                 if (allPdfs.length > 0) {
                     return allPdfs[noteIndex] || allPdfs[0];
                 }
-
                 return null;
             }
 
@@ -240,7 +208,6 @@
                         fetch(v2TodaysApi)
                     ]);
 
-                    // 1. Fetch from V1 API
                     if (resV1.status === 'fulfilled' && resV1.value.ok) {
                         const json = await resV1.value.json();
                         apiData = json.data || json || {};
@@ -252,10 +219,8 @@
                         if (apiData.topic) topicRaw = apiData.topic;
                         else if (apiData.topicName) topicRaw = apiData.topicName;
 
-                        if (apiData.subjectId) {
-                            if (typeof apiData.subjectId === 'object') {
-                                subjectSlug = apiData.subjectId.slug || slugify(apiData.subjectId.name) || subjectInput;
-                            }
+                        if (apiData.subjectId && typeof apiData.subjectId === 'object') {
+                            subjectSlug = apiData.subjectId.slug || slugify(apiData.subjectId.name) || subjectInput;
                         }
 
                         const statusUpper = String(apiData.status || '').toUpperCase();
@@ -264,7 +229,6 @@
                         }
                     }
 
-                    // 2. Fetch from V2 API
                     if (resV2.status === 'fulfilled' && resV2.value.ok) {
                         const json = await resV2.value.json();
                         const list = json.data || json || [];
@@ -284,45 +248,30 @@
                     console.warn("API check error:", e);
                 }
 
-                // Check if user is trying to open notes/PDF
                 if (tap === 'note' || tap === 'pdf' || urlParams.has('noteIndex')) {
                     const pdfUrl = extractPdfUrlDeep(apiData, noteIndex, isDpp);
-                    
                     if (pdfUrl) {
-                        document.getElementById('ovLoad').style.display = 'none';
-                        document.getElementById('vid').style.display = 'none';
-                        
-                        const pdfFrame = document.getElementById('pdf-frame');
-                        pdfFrame.style.display = 'block';
-                        
-                        // Direct redirection or rendering inside viewer
-                        const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
-                        pdfFrame.src = viewerUrl;
+                        // Direct auto-redirect to PDF URL (No extra intermediate page)
+                        window.location.replace(pdfUrl);
                         return;
                     } else {
-                        document.getElementById('loadMsg').innerText = "Notes / PDF link not found in API response!";
+                        document.getElementById('loadMsg').innerText = "Notes / PDF link missing!";
                         return;
                     }
                 }
 
-                // Fallback parsing if topic or title missing
-                if (!topicRaw && title) {
-                    topicRaw = title.split(':')[0].split('-')[0].trim();
-                }
-                if (!title && topicRaw) {
-                    title = topicRaw;
-                }
+                if (!topicRaw && title) topicRaw = title.split(':')[0].split('-')[0].trim();
+                if (!title && topicRaw) title = topicRaw;
 
                 const baseUrl = "https://studyaura.online/player";
                 const params = new URLSearchParams();
-
                 params.set('rc', rc);
                 params.set('pro', pro);
                 params.set('title', title);
                 params.set('t', title);
                 params.set('subject', subjectSlug || subjectInput);
                 params.set('topic', topicRaw || title);
-                
+
                 if (isLive) {
                     params.set('live', 'true');
                     params.set('type', 'live');
