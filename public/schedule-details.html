@@ -17,14 +17,14 @@
 
             :root {
                 --accent: #5a4bda;
-                --bg: #ffffff;
-                --text: #1c1c27;
+                --bg: #0d0d12;
+                --text: #ffffff;
             }
 
             html, body {
                 height: 100%;
                 width: 100%;
-                background: var(--bg);
+                background: var(--bg) !important;
                 font-family: 'DM Sans', -apple-system, sans-serif;
                 color: var(--text);
                 overflow: hidden;
@@ -35,7 +35,7 @@
                 inset: 0;
                 display: flex;
                 flex-direction: column;
-                background: var(--bg);
+                background: var(--bg) !important;
                 overflow: hidden;
             }
 
@@ -52,14 +52,14 @@
                 min-width: 0;
                 min-height: 0;
                 position: relative;
-                background: #000;
+                background: var(--bg) !important;
                 overflow: hidden;
             }
 
             #vid-box {
                 position: absolute;
                 inset: 0;
-                background: #000;
+                background: var(--bg) !important;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -72,15 +72,15 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                gap: 10px;
+                gap: 12px;
                 z-index: 10;
-                background: rgba(255, 255, 255, 0.95);
+                background: var(--bg) !important;
             }
 
             .spinner {
                 width: 40px;
                 height: 40px;
-                border: 3px solid rgba(90, 75, 218, 0.18);
+                border: 3px solid rgba(255, 255, 255, 0.15);
                 border-top-color: var(--accent);
                 border-radius: 50%;
                 animation: spin 0.8s linear infinite;
@@ -88,7 +88,7 @@
 
             #loadMsg {
                 font-size: 14px;
-                color: #555;
+                color: #a0a0ab;
                 text-align: center;
                 padding: 0 15px;
                 font-weight: 500;
@@ -173,6 +173,15 @@
             }
 
             async function processScheduleDetails() {
+                // Fix back button loop issue when coming back from PDF
+                if (sessionStorage.getItem('opened_pdf_flag')) {
+                    sessionStorage.removeItem('opened_pdf_flag');
+                    if (window.history.length > 1) {
+                        window.history.back();
+                        return;
+                    }
+                }
+
                 const urlParams = new URLSearchParams(window.location.search);
 
                 const defaultRc = "698ad3519549b300a5e1cc6a";
@@ -251,7 +260,8 @@
                 if (tap === 'note' || tap === 'pdf' || urlParams.has('noteIndex')) {
                     const pdfUrl = extractPdfUrlDeep(apiData, noteIndex, isDpp);
                     if (pdfUrl) {
-                        // Direct auto-redirect to PDF URL (No extra intermediate page)
+                        // Mark session flag so returning back won't auto-redirect again
+                        sessionStorage.setItem('opened_pdf_flag', 'true');
                         window.location.replace(pdfUrl);
                         return;
                     } else {
