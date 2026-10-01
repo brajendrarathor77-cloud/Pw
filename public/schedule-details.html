@@ -115,6 +115,14 @@
         </div>
 
         <script>
+            // Check if user came back from PDF page and jump back immediately
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted || sessionStorage.getItem('pdf_redirect_done')) {
+                    sessionStorage.removeItem('pdf_redirect_done');
+                    window.history.go(-1);
+                }
+            });
+
             function slugify(text) {
                 if (!text) return '';
                 return text.toString().toLowerCase()
@@ -173,15 +181,6 @@
             }
 
             async function processScheduleDetails() {
-                // Fix back button loop issue when coming back from PDF
-                if (sessionStorage.getItem('opened_pdf_flag')) {
-                    sessionStorage.removeItem('opened_pdf_flag');
-                    if (window.history.length > 1) {
-                        window.history.back();
-                        return;
-                    }
-                }
-
                 const urlParams = new URLSearchParams(window.location.search);
 
                 const defaultRc = "698ad3519549b300a5e1cc6a";
@@ -260,9 +259,8 @@
                 if (tap === 'note' || tap === 'pdf' || urlParams.has('noteIndex')) {
                     const pdfUrl = extractPdfUrlDeep(apiData, noteIndex, isDpp);
                     if (pdfUrl) {
-                        // Mark session flag so returning back won't auto-redirect again
-                        sessionStorage.setItem('opened_pdf_flag', 'true');
-                        window.location.replace(pdfUrl);
+                        sessionStorage.setItem('pdf_redirect_done', 'true');
+                        window.location.href = pdfUrl;
                         return;
                     } else {
                         document.getElementById('loadMsg').innerText = "Notes / PDF link missing!";
