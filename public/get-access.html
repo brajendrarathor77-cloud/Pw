@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Get Access â€” Mod Galaxy</title>
+<title>Get Access â€” AURA MAX</title>
 <link rel="icon" type="image/png" href="/static/site_logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -74,8 +74,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <div class="particles" id="particles"></div>
 
 <div class="brand">
-    <img src="/static/site_logo.png" alt="Mod Galaxy" onerror="this.style.display='none'">
-    <span class="brand-name">Mod Galaxy</span>
+    <img src="/static/site_logo.png" alt="AURA MAX" onerror="this.style.display='none'">
+    <span class="brand-name">AURA MAX</span>
 </div>
 
 <div class="card">
@@ -83,7 +83,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="step active" id="step1">
         <div class="step-icon">ðŸ”</div>
         <div class="step-title">Unlock Full Access</div>
-        <div class="step-desc">Get a free 24-hour access code to unlock all premium content on Mod Galaxy.</div>
+        <div class="step-desc">Get a free 24-hour access code to unlock all premium content on AURA MAX.</div>
         <button class="btn btn-primary" id="btn-get-code" onclick="handleGetCode()">
             <span id="btn-get-text">âš¡ Get Access Code</span>
             <div class="loading-spinner" id="get-spinner"></div>
@@ -97,7 +97,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         <div class="step-title">Enter Access Code</div>
         <div class="step-desc">Paste your access code below to activate 24 hours of premium access.</div>
         <div class="input-wrap">
-            <input type="text" class="code-input" id="code-input" placeholder="ASM-XXXXXX" maxlength="20" autocomplete="off" spellcheck="false">
+            <input type="text" class="code-input" id="code-input" placeholder="HR-XXXXXX" maxlength="20" autocomplete="off" spellcheck="false">
         </div>
         <div class="error-msg" id="error-msg"></div>
         <button class="btn btn-primary" onclick="handleVerify()">âœ… Verify & Activate</button>
@@ -137,10 +137,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     }
 })();
 
-const MASTER_KEYS=['ADMIN2026','VIPPASS','ASMULTI99','MASTERKEY'];
-const LS_PENDING='_asm_pending_auth';
-const LS_EXPIRY='asm_access_expiry';
-const BRAND_PREFIX='ASM-';
+const MASTER_KEYS=['ADMIN2099','VIPPASS','HR99','MASTERKEY'];
+const LS_PENDING='_HR_pending_auth';
+const LS_EXPIRY='HR_access_expiry';
+const BRAND_PREFIX='HR-';
 const SITE_ORIGIN=location.origin;
 
 // â”€â”€â”€ On load: check URL for returning code, or check active session â”€â”€â”€
