@@ -80,6 +80,7 @@
             color: #f1f5f9;
         }
 
+
         .countdown-timer {
             display: none;
             align-items: center;
@@ -153,7 +154,7 @@
             font-size: 16px;
         }
 
-        .autocomplete-dropdown {
+.autocomplete-dropdown {
             position: absolute;
             top: 100%; left: 0; right: 0;
             background: #1e293b;
@@ -329,7 +330,8 @@
             gap: 4px;
             background: rgba(245, 158, 11, 0.15);
             border: 1px solid rgba(245, 158, 11, 0.4);
-            color: #f59e0b;
+
+color: #f59e0b;
             font-size: 11px;
             font-weight: 700;
             padding: 3px 8px;
@@ -509,7 +511,8 @@
         }
 
         .spinner {
-            width: 40px; height: 40px;
+
+width: 40px; height: 40px;
             border: 4px solid rgba(99, 102, 241, 0.2);
             border-top: 4px solid #6366f1;
             border-radius: 50%;
@@ -687,6 +690,16 @@
             opacity: 0.8;
         }
 
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
+            box-shadow: 0 6px 18px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(37, 211, 102, 0.4);
+        }
+
         .telegram-btn {
             background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
             box-shadow: 0 6px 18px rgba(42, 171, 238, 0.3);
@@ -747,7 +760,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
+
+flex-shrink: 0;
             transition: transform 0.1s;
         }
 
@@ -867,7 +881,7 @@
 
     <div class="header">
         <div class="site-brand">
-            <div class="brand-icon">H</div>
+            <img src="https://cdn.phototourl.com/free/2026-08-27-938d1ac8-e30e-4606-b896-5eba77b57b13.jpg" style="width:28px;height:28px;border-radius:7px" alt="HR">
             <div class="brand-name">AURA MAX</div>
         </div>
         <div class="countdown-timer" id="countdownTimer">
@@ -877,7 +891,13 @@
 
     <div class="search-section">
         <div class="search-container">
-            <input type="text" class="search-box" placeholder="Search batches..." id="searchInput" autocomplete="off">
+            <input
+                type="text"
+                class="search-box"
+                placeholder="Search batches..."
+                id="searchInput"
+                autocomplete="off"
+            >
             <button class="search-btn" id="searchBtn">🔍</button>
             <div class="autocomplete-dropdown" id="autocomplete"></div>
         </div>
@@ -895,9 +915,10 @@
             <div class="error-box-title" id="errorTitle"></div>
             <div class="error-box-desc"  id="errorMessage"></div>
         </div>
-        <div id="totalBatches"     class="batches-grid"></div>
+        <div id="totalBatches"    class="batches-grid"></div>
         <div id="favouriteBatches" class="batches-grid" style="display:none;"></div>
-        <div id="loading"          class="loading-spinner" style="display:none;">
+
+<div id="loading"          class="loading-spinner" style="display:none;">
             <div class="spinner"></div>
         </div>
     </div>
@@ -914,9 +935,22 @@
             </div>
 
             <div class="popup-title">Stay Connected!</div>
-            <div class="popup-desc">Join our official channel for instant updates, study materials and live notifications</div>
+            <div class="popup-desc">Join our official channels for instant updates, study materials and live notifications</div>
 
             <div class="popup-actions">
+                <button class="social-btn whatsapp-btn" id="popupWhatsapp">
+                    <span class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="white">
+                            <path d="M17.6 6.32A8.86 8.86 0 0 0 12 4.06 8.94 8.94 0 0 0 3.06 13c0 1.58.42 3.06 1.15 4.34L3 21l3.78-1.2a8.9 8.9 0 0 0 5.22 1.66A8.94 8.94 0 0 0 21 12.52a8.86 8.86 0 0 0-3.4-6.2Zm-5.6 13.6c-1.55 0-3-.42-4.24-1.22l-.3-.18-2.46.78.8-2.4-.2-.32A7.36 7.36 0 0 1 4.56 13 7.44 7.44 0 0 1 12 5.56 7.4 7.4 0 0 1 19.4 13a7.44 7.44 0 0 1-7.4 6.92Zm4.06-5.54c-.22-.11-1.3-.64-1.5-.71-.2-.07-.35-.11-.5.11-.15.22-.57.71-.7.85-.13.15-.26.16-.48.05-.22-.11-1.06-.39-1.93-1.18-.71-.63-1.19-1.42-1.33-1.66-.14-.24-.01-.37.11-.49.11-.11.25-.29.37-.43.13-.15.17-.25.26-.41.09-.16.04-.3-.02-.42-.07-.11-.6-1.45-.83-1.99-.22-.52-.44-.45-.61-.46-.16-.01-.35-.01-.54-.01-.18 0-.48.07-.73.34-.25.27-.97.95-.97 2.32 0 1.37 1 2.69 1.14 2.88.14.18 1.86 2.85 4.51 3.89 2.65 1.04 2.65.69 3.13.65.48-.04 1.55-.63 1.77-1.24.22-.61.22-1.13.15-1.24-.07-.11-.26-.18-.48-.29Z"/>
+                        </svg>
+                    </span>
+                    <span class="social-text">
+                        <span class="label-main">Join WhatsApp Channel</span>
+                        <span class="label-sub">Get instant updates &amp; alerts</span>
+                    </span>
+                    <span class="social-arrow">›</span>
+                </button>
+
                 <button class="social-btn telegram-btn" id="popupTelegram">
                     <span class="social-icon">
                         <svg viewBox="0 0 24 24" fill="white">
@@ -944,7 +978,13 @@
         </div>
         <div class="mahapack-search-section">
             <div class="mahapack-search-container">
-                <input type="text" class="mahapack-search-box" placeholder="Search sub-batches..." id="mahapackSearchInput" autocomplete="off">
+                <input
+                    type="text"
+                    class="mahapack-search-box"
+                    placeholder="Search sub-batches..."
+                    id="mahapackSearchInput"
+                    autocomplete="off"
+                >
                 <span class="mahapack-search-icon">🔍</span>
             </div>
         </div>
@@ -953,18 +993,35 @@
         </div>
     </div>
 
-    <div id="resetKeyPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; z-index:3000;">
-        <div style="background:linear-gradient(135deg,#1e293b,#0f172a); border-radius:20px; padding:35px 28px; max-width:360px; width:90%; position:relative; border:2px solid #ef4444; text-align:center;">
-            <button onclick="document.getElementById('resetKeyPopup').style.display='none'" style="position:absolute; top:12px; right:12px; width:32px; height:32px; background:rgba(51,65,85,0.6); border:none; border-radius:50%; cursor:pointer; font-size:16px; color:#94a3b8;">✕</button>
+    <div id="resetKeyPopup" style="
+        display:none; position:fixed; inset:0;
+        background:rgba(0,0,0,0.85); align-items:center;
+        justify-content:center; z-index:3000;">
+        <div style="
+            background:linear-gradient(135deg,#1e293b,#0f172a);
+            border-radius:20px; padding:35px 28px; max-width:360px;
+            width:90%; position:relative; border:2px solid #ef4444; text-align:center;">
+            <button onclick="document.getElementById('resetKeyPopup').style.display='none'" style="
+                position:absolute; top:12px; right:12px; width:32px; height:32px;
+                background:rgba(51,65,85,0.6); border:none; border-radius:50%;
+                cursor:pointer; font-size:16px; color:#94a3b8;">✕</button>
             <div style="font-size:40px; margin-bottom:15px;">🔑</div>
             <div style="font-size:20px; font-weight:800; color:#e2e8f0; margin-bottom:10px;">Reset Session Key</div>
-            <div style="font-size:14px; color:#94a3b8; margin-bottom:25px; line-height:1.5;">Your current session will be deleted and you'll need to generate a new key to continue.</div>
-            <button onclick="resetKey()" style="background:linear-gradient(135deg,#ef4444,#dc2626); border:none; border-radius:12px; padding:13px 35px; font-size:15px; font-weight:700; color:white; cursor:pointer;">🔄 Reset Key</button>
+            <div style="font-size:14px; color:#94a3b8; margin-bottom:25px; line-height:1.5;">
+                Your current session will be deleted and you'll need to generate a new key to continue.
+            </div>
+            <button onclick="resetKey()" style="
+                background:linear-gradient(135deg,#ef4444,#dc2626);
+                border:none; border-radius:12px; padding:13px 35px;
+                font-size:15px; font-weight:700; color:white; cursor:pointer;">
+                🔄 Reset Key
+            </button>
         </div>
     </div>
 
     <script>
-        const SITE_THUMBNAIL  = '/static/site_thumbnail.png';
+        (function(){var e=localStorage.getItem('asm_access_expiry');if(!e||Date.now()>parseInt(e)){localStorage.removeItem('asm_access_expiry');window.location.href='/get-access';return;}})();
+        const SITE_THUMBNAIL = 'https://cdn.phototourl.com/free/2026-08-27-938d1ac8-e30e-4606-b896-5eba77b57b13.jpg';
         let ALL_BATCHES       = [];
         let DISPLAYED_BATCHES = [];
         const BATCH_SIZE      = 10;
@@ -974,42 +1031,46 @@
             allBatchesLoaded:    false,
             displayedCount:      0,
             isSearchMode:        false,
-            searchQuery:         '',
+            searchQuery:         "",
             highlightedIndex:    -1,
             favourites:          [],
-            activeTab:           'total',
+            activeTab:           "total",
             pendingSearch:       null,
             waitingForData:      false,
             currentMahapack:     null,
-            mahapackSearchQuery: ''
+            mahapackSearchQuery: ""
         };
 
         const el = {
-            searchInput:         document.getElementById('searchInput'),
-            autocomplete:        document.getElementById('autocomplete'),
-            content:             document.getElementById('content'),
-            totalBatches:        document.getElementById('totalBatches'),
-            favouriteBatches:    document.getElementById('favouriteBatches'),
-            loading:             document.getElementById('loading'),
-            errorBox:            document.getElementById('errorBox'),
-            errorTitle:          document.getElementById('errorTitle'),
-            errorMessage:        document.getElementById('errorMessage'),
-            searchBtn:           document.getElementById('searchBtn'),
-            totalTab:            document.getElementById('totalTab'),
-            favouriteTab:        document.getElementById('favouriteTab'),
-            telegramPopup:       document.getElementById('telegramPopup'),
-            popupClose:          document.getElementById('popupClose'),
-            popupTelegram:       document.getElementById('popupTelegram'),
-            mahapackOverlay:     document.getElementById('mahapack-overlay'),
-            mahapackBackBtn:     document.getElementById('mahapackBackBtn'),
-            mahapackTitle:       document.getElementById('mahapackTitle'),
-            mahapackGrid:        document.getElementById('mahapackGrid'),
-            mahapackSearchInput: document.getElementById('mahapackSearchInput')
+            menu:                document.getElementById("menu"),
+            overlay:             document.getElementById("overlay"),
+            searchInput:         document.getElementById("searchInput"),
+            autocomplete:        document.getElementById("autocomplete"),
+            content:             document.getElementById("content"),
+            totalBatches:        document.getElementById("totalBatches"),
+            favouriteBatches:    document.getElementById("favouriteBatches"),
+            loading:             document.getElementById("loading"),
+            errorBox:            document.getElementById("errorBox"),
+            errorTitle:          document.getElementById("errorTitle"),
+
+errorMessage:        document.getElementById("errorMessage"),
+            searchBtn:           document.getElementById("searchBtn"),
+            totalTab:            document.getElementById("totalTab"),
+            favouriteTab:        document.getElementById("favouriteTab"),
+            telegramPopup:       document.getElementById("telegramPopup"),
+            popupClose:          document.getElementById("popupClose"),
+            popupWhatsapp:       document.getElementById("popupWhatsapp"),
+            popupTelegram:       document.getElementById("popupTelegram"),
+            mahapackOverlay:     document.getElementById("mahapack-overlay"),
+            mahapackBackBtn:     document.getElementById("mahapackBackBtn"),
+            mahapackTitle:       document.getElementById("mahapackTitle"),
+            mahapackGrid:        document.getElementById("mahapackGrid"),
+            mahapackSearchInput: document.getElementById("mahapackSearchInput")
         };
 
         const cookieManager = {
             get(name) {
-                const match = document.cookie.match(new RegExp(name + '=([^;]+)'));
+                const match = document.cookie.match(new RegExp(name + "=([^;]+)"));
                 return match ? JSON.parse(decodeURIComponent(match[1])) : null;
             },
             set(name, value) {
@@ -1018,7 +1079,7 @@
                 document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))};expires=${date.toUTCString()};path=/`;
             },
             getValue(name) {
-                const match = document.cookie.match(new RegExp(name + '=([^;]+)'));
+                const match = document.cookie.match(new RegExp(name + "=([^;]+)"));
                 return match ? match[1] : null;
             }
         };
@@ -1028,28 +1089,28 @@
             expiryTime: null,
 
             init() {
-                const v = cookieManager.getValue('session_expiry');
+                const v = cookieManager.getValue("session_expiry");
                 if (!v) return;
                 this.expiryTime = parseInt(v);
                 this.start();
             },
 
             formatTime(ms) {
-                if (ms <= 0) return '00:00:00';
+                if (ms <= 0) return "00:00:00";
                 const h = Math.floor(ms / 3600000);
                 const m = Math.floor((ms % 3600000) / 60000);
                 const s = Math.floor((ms % 60000) / 1000);
-                return [h, m, s].map(n => String(n).padStart(2, '0')).join(':');
+                return [h, m, s].map(n => String(n).padStart(2, "0")).join(":");
             },
 
             updateDisplay() {
-                const timerEl = document.getElementById('countdownTimer');
-                const timeEl  = document.getElementById('countdownTime');
-                if (!this.expiryTime) { timerEl.classList.remove('show'); return; }
+                const timerEl = document.getElementById("countdownTimer");
+                const timeEl  = document.getElementById("countdownTime");
+                if (!this.expiryTime) { timerEl.classList.remove("show"); return; }
                 const remaining = this.expiryTime - Date.now();
-                if (remaining <= 0) { timeEl.textContent = '00:00:00'; this.stop(); return; }
+                if (remaining <= 0) { timeEl.textContent = "00:00:00"; this.stop(); return; }
                 timeEl.textContent = this.formatTime(remaining);
-                timerEl.classList.add('show');
+                timerEl.classList.add("show");
             },
 
             start() {
@@ -1064,15 +1125,15 @@
         };
 
         const escapeHTML = (t) =>
-            (t || '').replace(/[&<>"']/g, m =>
-                ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])
+            (t || "").replace(/[&<>"']/g, m =>
+                ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m])
             );
 
         const normalizeText = (t) =>
-            (t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+            (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 
         const tokenize = (t) =>
-            normalizeText(t).split(/\s+/).map(x => x.replace(/[^a-z0-9]+/g, '')).filter(Boolean);
+            normalizeText(t).split(/\s+/).map(x => x.replace(/[^a-z0-9]+/g, "")).filter(Boolean);
 
         function calcLevenshtein(a, b) {
             if (!a.length) return b.length;
@@ -1094,7 +1155,8 @@
             const matches = [];
             query.trim().split(/\s+/).forEach(p => {
                 if (!p) return;
-                const re = new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+
+const re = new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
                 let m;
                 while ((m = re.exec(text)) !== null) {
                     matches.push({ start: m.index, end: m.index + m[0].length });
@@ -1112,7 +1174,7 @@
                 }
             });
             if (!merged.length) return escapeHTML(text);
-            let result = '', lastIdx = 0;
+            let result = "", lastIdx = 0;
             merged.forEach(m => {
                 result += escapeHTML(text.substring(lastIdx, m.start));
                 result += `<span class="autocomplete-highlight">${escapeHTML(text.substring(m.start, m.end))}</span>`;
@@ -1124,10 +1186,10 @@
         const showError = (title, msg) => {
             el.errorTitle.textContent   = title;
             el.errorMessage.textContent = msg;
-            el.errorBox.classList.add('show');
+            el.errorBox.classList.add("show");
         };
 
-        const hideError = () => el.errorBox.classList.remove('show');
+        const hideError = () => el.errorBox.classList.remove("show");
 
         const skeletonHTML = () => `
             <div class="skeleton-card">
@@ -1139,10 +1201,10 @@
             </div>
         `;
 
-        const showSkeletonLoader = (count = 10) => Array(count).fill(skeletonHTML()).join('');
+        const showSkeletonLoader = (count = 10) => Array(count).fill(skeletonHTML()).join("");
 
         function renderPriceHTML(feeTotal) {
-            if (feeTotal === null || feeTotal === undefined || feeTotal === '') return '';
+            if (feeTotal === null || feeTotal === undefined || feeTotal === "") return "";
             const fee = Number(feeTotal);
             if (fee === 0) {
                 return `<div class="batch-price">💵 <span class="batch-price-free">₹0</span></div>`;
@@ -1155,23 +1217,24 @@
         }
 
         function buildBatchCard(batch, showFavBtn = true) {
-            const isMahapack = batch.type === 'MAHAPACK';
+            const isMahapack = batch.type === "MAHAPACK";
             const isFav      = state.favourites.includes(batch._id);
 
             return `
-                <div class="batch ${isMahapack ? 'mahapack' : ''}"
+                <div class="batch ${isMahapack ? "mahapack" : ""}"
                      data-id="${escapeHTML(batch._id)}"
-                     data-slug="${escapeHTML(batch.slug || '')}"
-                     data-name="${escapeHTML(batch.name || '')}"
-                     data-type="${escapeHTML(batch.type || '')}">
+                     data-slug="${escapeHTML(batch.slug || "")}"
+                     data-name="${escapeHTML(batch.name || "")}"
+                     data-type="${escapeHTML(batch.type || "")}">
 
                     ${showFavBtn ? `
-                        <button class="favorite-btn ${isFav ? 'favorited' : ''}" data-batch-id="${escapeHTML(batch._id)}">
-                            ${isFav ? '❤️' : '🤍'}
+                        <button class="favorite-btn ${isFav ? "favorited" : ""}"
+                                data-batch-id="${escapeHTML(batch._id)}">
+                            ${isFav ? "❤️" : "🤍"}
                         </button>
-                    ` : ''}
+                    ` : ""}
 
-                    ${isMahapack ? `<div class="mahapack-badge">📦 MAHAPACK</div>` : ''}
+                    ${isMahapack ? `<div class="mahapack-badge">📦 MAHAPACK</div>` : ""}
 
                     <div class="batch-name">${escapeHTML(batch.name)}</div>
 
@@ -1183,20 +1246,21 @@
                     </div>
 
                     <div class="batch-info">
-                        ${batch.language ? `<div class="batch-language">${escapeHTML(batch.language)}</div>` : ''}
-                        ${batch.byName   ? `<div class="batch-byname">${escapeHTML(batch.byName)}</div>`   : ''}
+                        ${batch.language ? `<div class="batch-language">${escapeHTML(batch.language)}</div>` : ""}
+                        ${batch.byName   ? `<div class="batch-byname">${escapeHTML(batch.byName)}</div>`   : ""}
 
                         ${batch.startDate && batch.endDate ? `
                             <div class="batch-dates">
                                 <div class="date-item">Start On ${escapeHTML(batch.startDate)}</div>
                                 <div class="date-item">End On ${escapeHTML(batch.endDate)}</div>
                             </div>
-                        ` : ''}
+
+` : ""}
 
                         ${renderPriceHTML(batch.feeTotal)}
 
                         <button class="explore-btn">
-                            ${isMahapack ? 'View Sub-Batches' : 'Explore'}
+                            ${isMahapack ? "View Sub-Batches" : "Explore"}
                         </button>
                     </div>
                 </div>
@@ -1205,92 +1269,49 @@
 
         function performFuzzySearch(searchTerm, sourceArray) {
             if (!searchTerm) return sourceArray.slice();
-
             const normalized = normalizeText(searchTerm);
             const tokens     = tokenize(searchTerm).filter(t => t.length >= 1);
             const results    = [];
 
             sourceArray.forEach((batch, idx) => {
-                const nameNorm   = normalizeText(batch.name);
-                const byNameNorm = normalizeText(batch.byName || '');
-                const combined   = nameNorm + ' ' + byNameNorm;
+                const batchNorm = normalizeText(batch.name);
+                let score = 0, matchType = "none";
 
-                let score = 0, matchType = 'none';
-
-                if (nameNorm === normalized) {
-                    score = 1000; matchType = 'exact';
-                } else if (nameNorm.includes(normalized)) {
-                    score = 500; matchType = 'substring';
-                } else if (combined.includes(normalized)) {
-                    score = 450; matchType = 'substring';
+                if (batchNorm === normalized) {
+                    score = 1000; matchType = "exact";
+                } else if (batchNorm.includes(normalized)) {
+                    score = 500; matchType = "substring";
                 } else {
-                    const nameTokens   = tokenize(batch.name).filter(t => t.length >= 1);
-                    const byNameTokens = tokenize(batch.byName || '').filter(t => t.length >= 1);
-
-                    if (!tokens.length) return;
-
-                    let totalScore   = 0;
-                    let matched      = 0;
-                    let exactMatches = 0;
-                    let nameMatches  = 0;
-
+                    const batchTokens = tokenize(batch.name).filter(t => t.length >= 1);
+                    if (!batchTokens.length || !tokens.length) return;
+                    let totalScore = 0, matched = 0, exactMatches = 0;
                     tokens.forEach(st => {
-                        let best = 0, foundExact = false, fromName = false;
-
-                        nameTokens.forEach(bt => {
-                            if (bt === st) {
-                                best = 100; foundExact = true; fromName = true;
-                            } else if (bt.includes(st) && st.length >= 2) {
-                                best = Math.max(best, 85);
-                            } else if (st.includes(bt) && bt.length >= 2) {
-                                best = Math.max(best, 75);
-                            } else {
+                        let best = 0, foundExact = false;
+                        batchTokens.forEach(bt => {
+                            if (bt === st)                             { best = 100; foundExact = true; }
+                            else if (bt.includes(st) && st.length >= 2) best = Math.max(best, 85);
+                            else if (st.includes(bt) && bt.length >= 2) best = Math.max(best, 75);
+                            else {
                                 const mx  = Math.max(st.length, bt.length);
                                 const sim = ((mx - calcLevenshtein(st, bt)) / mx) * 100;
-                                if (sim > best) { best = sim; if (sim >= 85) fromName = true; }
+                                if (sim > best) best = sim;
                             }
                         });
-
-                        byNameTokens.forEach(bt => {
-                            let local = 0;
-                            if (bt === st) {
-                                local = 100; foundExact = true;
-                            } else if (bt.includes(st) && st.length >= 2) {
-                                local = 75;
-                            } else if (st.includes(bt) && bt.length >= 2) {
-                                local = 65;
-                            } else {
-                                const mx  = Math.max(st.length, bt.length);
-                                local = ((mx - calcLevenshtein(st, bt)) / mx) * 90;
-                            }
-                            if (local > best) best = local;
-                        });
-
-                        if (best >= 35) {
-                            totalScore += best;
-                            matched++;
-                            if (foundExact) exactMatches++;
-                            if (fromName)   nameMatches++;
-                        } else {
-                            totalScore += 5;
-                        }
+                        if (best >= 40) { totalScore += best; matched++; if (foundExact) exactMatches++; }
                     });
-
                     if (matched > 0) {
                         const avg        = totalScore / tokens.length;
                         const matchRatio = matched / tokens.length;
-
-                        if (avg >= 40) {
+                        if (avg >= 55) {
                             score = avg * matchRatio * 10;
                             if (exactMatches > 0) score += exactMatches * 50;
-                            if (nameMatches  > 0) score += nameMatches  * 30;
                             if (matchRatio === 1)  score += 100;
-                            matchType = 'fuzzy';
+                            matchType = "fuzzy";
                         }
                     }
                 }
 
-                if (matchType !== 'none') {
+                if (matchType !== "none") {
                     results.push({ batch, score: Math.round(score), index: idx, matchType });
                 }
             });
@@ -1308,23 +1329,24 @@
 
         function openMahapackOverlay(batch) {
             state.currentMahapack        = batch;
-            state.mahapackSearchQuery    = '';
-            el.mahapackSearchInput.value = '';
+            state.mahapackSearchQuery    = "";
+            el.mahapackSearchInput.value = "";
             el.mahapackTitle.textContent = batch.name;
             renderMahapackGrid(batch.subBatches || []);
-            el.mahapackOverlay.classList.add('open');
-            document.body.style.overflow = 'hidden';
+            el.mahapackOverlay.classList.add("open");
+            document.body.style.overflow = "hidden";
         }
 
         function closeMahapackOverlay() {
-            el.mahapackOverlay.classList.remove('open');
-            document.body.style.overflow = '';
+            el.mahapackOverlay.classList.remove("open");
+            document.body.style.overflow = "";
             state.currentMahapack     = null;
-            state.mahapackSearchQuery = '';
+            state.mahapackSearchQuery = "";
         }
 
         function renderMahapackGrid(subBatches) {
-            el.mahapackGrid.innerHTML = '';
+            el.mahapackGrid.innerHTML = "";
+
             if (!subBatches.length) {
                 el.mahapackGrid.innerHTML = `
                     <div class="mahapack-empty">
@@ -1334,7 +1356,11 @@
                 `;
                 return;
             }
-            el.mahapackGrid.innerHTML = subBatches.map(sub => buildBatchCard(sub, false)).join('');
+
+            el.mahapackGrid.innerHTML = subBatches
+                .map(sub => buildBatchCard(sub, false))
+
+.join("");
         }
 
         let mahapackSearchTimeout;
@@ -1359,14 +1385,19 @@
         };
 
         el.mahapackGrid.onclick = (e) => {
-            const favBtn = e.target.closest('.favorite-btn');
-            if (favBtn) { e.stopPropagation(); toggleFavourite(favBtn.dataset.batchId); return; }
-            const batchEl = e.target.closest('.batch');
-            if (batchEl && !e.target.closest('.favorite-btn')) {
+            const favBtn = e.target.closest(".favorite-btn");
+            if (favBtn) {
+                e.stopPropagation();
+                toggleFavourite(favBtn.dataset.batchId);
+                return;
+            }
+            const batchEl = e.target.closest(".batch");
+            if (batchEl && !e.target.closest(".favorite-btn")) {
                 const batchId   = batchEl.dataset.id;
                 const batchName = batchEl.dataset.name;
                 if (batchId) {
-                    window.location.href = 'https://pw-aura-max.vercel.app/subjects.html?' + new URLSearchParams({ batchId, batchName }).toString();
+                    const params = new URLSearchParams({ batchId, batchName });
+                    window.location.href = "/subjects?" + params.toString();
                 }
             }
         };
@@ -1374,21 +1405,26 @@
         el.mahapackBackBtn.onclick = closeMahapackOverlay;
 
         function handleBatchClick(e) {
-            const favBtn = e.target.closest('.favorite-btn');
-            if (favBtn) { e.stopPropagation(); toggleFavourite(favBtn.dataset.batchId); return; }
-            const batchEl = e.target.closest('.batch');
-            if (!batchEl || e.target.closest('.favorite-btn')) return;
+            const favBtn = e.target.closest(".favorite-btn");
+            if (favBtn) {
+                e.stopPropagation();
+                toggleFavourite(favBtn.dataset.batchId);
+                return;
+            }
+            const batchEl = e.target.closest(".batch");
+            if (!batchEl || e.target.closest(".favorite-btn")) return;
 
             const batchType = batchEl.dataset.type;
             const batchId   = batchEl.dataset.id;
             const batchName = batchEl.dataset.name;
 
-            if (batchType === 'MAHAPACK') {
+            if (batchType === "MAHAPACK") {
                 const batchData = ALL_BATCHES.find(b => b._id === batchId);
                 if (batchData) openMahapackOverlay(batchData);
             } else {
                 if (batchId) {
-                    window.location.href = 'https://pw-aura-max.vercel.app/subjects.html?' + new URLSearchParams({ batchId, batchName }).toString();
+                    const params = new URLSearchParams({ batchId, batchName });
+                    window.location.href = "/subjects?" + params.toString();
                 }
             }
         }
@@ -1402,7 +1438,7 @@
                 state.pendingSearch = null;
                 performSearch(t);
             }
-            if (state.activeTab === 'favourite' && state.waitingForData) {
+            if (state.activeTab === "favourite" && state.waitingForData) {
                 state.waitingForData = false;
                 renderFavourites();
             }
@@ -1415,7 +1451,7 @@
             state.loading = true;
             el.totalBatches.innerHTML = showSkeletonLoader(10);
 
-            fetch('https://rarestudy.github.io/rarestudy/batches.json?v=' + Date.now())
+            fetch("https://rarestudy.github.io/rarestudy/batches.json?v=" + Date.now())
                 .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
                 .then(data => {
                     if (data.success && data.batches) {
@@ -1426,14 +1462,14 @@
                         renderBatches(DISPLAYED_BATCHES, true);
                         onDataLoaded();
                     } else {
-                        throw new Error('Invalid response');
+                        throw new Error("Invalid response");
                     }
                 })
                 .catch(err => { console.error(err); handleLoadError(err); })
                 .finally(() => { state.loading = false; });
         }
 
-        function loadMoreBatches() {
+function loadMoreBatches() {
             if (state.loading || state.isSearchMode || state.displayedCount >= ALL_BATCHES.length) return;
             const next = ALL_BATCHES.slice(state.displayedCount, state.displayedCount + BATCH_SIZE);
             if (!next.length) return;
@@ -1443,35 +1479,38 @@
         }
 
         function handleLoadError(error) {
-            el.totalBatches.innerHTML = '';
-            if (error.message.includes('Failed to fetch')) {
-                showError('No Internet Connection', 'Please check your connection and refresh.');
-            } else if (error.message.includes('HTTP')) {
-                showError('Server Error', 'Server error occurred. Please refresh.');
+            el.totalBatches.innerHTML = "";
+            if (error.message.includes("Failed to fetch")) {
+                showError("No Internet Connection", "Please check your connection and refresh.");
+            } else if (error.message.includes("HTTP")) {
+                showError("Server Error", "Server error occurred. Please refresh.");
             } else {
-                showError('Failed to Load', 'Unable to load batches. Please refresh.');
+                showError("Failed to Load", "Unable to load batches. Please refresh.");
             }
         }
 
         function renderBatches(batches, clear = false) {
             hideError();
-            if (!batches.length && clear) { showError('No Batches', 'No batches available.'); return; }
-            const html = batches.map(b => buildBatchCard(b, true)).join('');
+            if (!batches.length && clear) {
+                showError("No Batches", "No batches available.");
+                return;
+            }
+            const html = batches.map(b => buildBatchCard(b, true)).join("");
             if (clear) el.totalBatches.innerHTML = html;
-            else       el.totalBatches.insertAdjacentHTML('beforeend', html);
+            else       el.totalBatches.insertAdjacentHTML("beforeend", html);
         }
 
         function renderFavourites() {
-            el.favouriteBatches.innerHTML = '';
+            el.favouriteBatches.innerHTML = "";
             hideError();
 
             if (!state.favourites.length) {
-                el.favouriteBatches.style.display = 'none';
-                showError('No Favourites', 'Click the heart icon (🤍) on any batch to add it to favourites.');
+                el.favouriteBatches.style.display = "none";
+                showError("No Favourites", "Click the heart icon (🤍) on any batch to add it to favourites.");
                 return;
             }
 
-            el.favouriteBatches.style.display = 'grid';
+            el.favouriteBatches.style.display = "grid";
 
             if (!state.allBatchesLoaded) {
                 el.favouriteBatches.innerHTML = showSkeletonLoader(state.favourites.length);
@@ -1479,41 +1518,48 @@
                 return;
             }
 
-            const favBatches = state.favourites.map(id => ALL_BATCHES.find(b => b._id === id)).filter(Boolean);
+            const favBatches = state.favourites
+                .map(id => ALL_BATCHES.find(b => b._id === id))
+                .filter(Boolean);
 
             if (!favBatches.length) {
-                el.favouriteBatches.style.display = 'none';
-                showError('Failed to Load Favourites', 'Unable to load your favourite batches. Please try again.');
+                el.favouriteBatches.style.display = "none";
+                showError("Failed to Load Favourites", "Unable to load your favourite batches. Please try again.");
                 return;
             }
 
-            el.favouriteBatches.innerHTML = favBatches.map(b => buildBatchCard(b, true)).join('');
+            el.favouriteBatches.innerHTML = favBatches.map(b => buildBatchCard(b, true)).join("");
         }
 
         function showAutocomplete(batches) {
-            if (!batches.length) { el.autocomplete.classList.remove('show'); return; }
+            if (!batches.length) {
+                el.autocomplete.classList.remove("show");
+                return;
+            }
             el.autocomplete.innerHTML = batches.map((batch, idx) => `
-                <div class="autocomplete-item ${idx === state.highlightedIndex ? 'highlighted' : ''}"
+                <div class="autocomplete-item ${idx === state.highlightedIndex ? "highlighted" : ""}"
                      data-id="${escapeHTML(batch._id)}"
                      data-name="${escapeHTML(batch.name)}">
                     <div class="autocomplete-thumb-wrap">
-                        <img class="autocomplete-thumb"
-                             src="${escapeHTML(batch.previewImage || SITE_THUMBNAIL)}"
-                             alt=""
-                             loading="lazy"
-                             onerror="this.src=SITE_THUMBNAIL">
+                        <img
+                            class="autocomplete-thumb"
+                            src="${escapeHTML(batch.previewImage || SITE_THUMBNAIL)}"
+                            alt=""
+                            loading="lazy"
+                            onerror="this.src=SITE_THUMBNAIL"
+                        >
                     </div>
                     <div class="autocomplete-info">
                         <div class="autocomplete-name">${highlightText(batch.name, state.searchQuery)}</div>
-                        ${batch.byName ? `<div class="autocomplete-meta">${escapeHTML(batch.byName)}</div>` : ''}
+                        ${batch.byName ? `<div class="autocomplete-meta">${escapeHTML(batch.byName)}</div>` : ""}
                     </div>
                 </div>
-            `).join('');
-            el.autocomplete.classList.add('show');
-            el.autocomplete.querySelectorAll('.autocomplete-item').forEach(item => {
+            `).join("");
+            el.autocomplete.classList.add("show");
+            el.autocomplete.querySelectorAll(".autocomplete-item").forEach(item => {
                 item.onclick = () => {
                     el.searchInput.value = item.dataset.name;
-                    el.autocomplete.classList.remove('show');
+                    el.autocomplete.classList.remove("show");
                     state.searchQuery = item.dataset.name;
                     performSearch(item.dataset.name);
                 };
@@ -1523,8 +1569,9 @@
         function performSearch(term = null) {
             if (term === null) term = el.searchInput.value.trim();
             state.searchQuery = term;
-            el.autocomplete.classList.remove('show');
-            hideError();
+            el.autocomplete.classList.remove("show");
+
+hideError();
             el.content.scrollTop = 0;
 
             if (!state.allBatchesLoaded) {
@@ -1536,7 +1583,7 @@
             if (!term) {
                 state.isSearchMode   = false;
                 state.pendingSearch  = null;
-                el.totalBatches.innerHTML = '';
+                el.totalBatches.innerHTML = "";
                 state.displayedCount = BATCH_SIZE;
                 DISPLAYED_BATCHES    = ALL_BATCHES.slice(0, BATCH_SIZE);
                 renderBatches(DISPLAYED_BATCHES, true);
@@ -1570,46 +1617,46 @@
                 ? state.favourites.filter(id => id !== batchId)
                 : [...state.favourites, batchId];
 
-            cookieManager.set('favourite_batches', state.favourites);
+            cookieManager.set("favourite_batches", state.favourites);
 
             document.querySelectorAll(`[data-batch-id="${batchId}"]`).forEach(btn => {
                 if (state.favourites.includes(batchId)) {
-                    btn.classList.add('favorited');
-                    btn.textContent = '❤️';
+                    btn.classList.add("favorited");
+                    btn.textContent = "❤️";
                 } else {
-                    btn.classList.remove('favorited');
-                    btn.textContent = '🤍';
+                    btn.classList.remove("favorited");
+                    btn.textContent = "🤍";
                 }
             });
 
-            if (state.activeTab === 'favourite') renderFavourites();
+            if (state.activeTab === "favourite") renderFavourites();
         }
 
         function switchTab(tab) {
             state.activeTab     = tab;
-            state.searchQuery   = '';
+            state.searchQuery   = "";
             state.isSearchMode  = false;
             state.pendingSearch = null;
             el.searchInput.value = '';
-            el.autocomplete.classList.remove('show');
-            el.totalTab.classList.toggle('active', tab === 'total');
-            el.favouriteTab.classList.toggle('active', tab === 'favourite');
+            el.autocomplete.classList.remove("show");
+            el.totalTab.classList.toggle("active", tab === "total");
+            el.favouriteTab.classList.toggle("active", tab === "favourite");
             hideError();
 
-            if (tab === 'total') {
-                el.totalBatches.style.display     = 'grid';
-                el.favouriteBatches.style.display = 'none';
+            if (tab === "total") {
+                el.totalBatches.style.display     = "grid";
+                el.favouriteBatches.style.display = "none";
             } else {
-                el.totalBatches.style.display = 'none';
+                el.totalBatches.style.display = "none";
                 renderFavourites();
             }
         }
 
         el.searchInput.onkeypress = (e) => {
-            if (e.key === 'Enter') {
+            if (e.key === "Enter") {
                 e.preventDefault();
                 if (state.highlightedIndex >= 0) {
-                    el.autocomplete.querySelector('.highlighted')?.click();
+                    el.autocomplete.querySelector(".highlighted")?.click();
                 } else {
                     performSearch();
                 }
@@ -1617,24 +1664,27 @@
         };
 
         el.searchInput.onkeydown = (e) => {
-            if (!el.autocomplete.classList.contains('show')) return;
-            const items = el.autocomplete.querySelectorAll('.autocomplete-item');
+            if (!el.autocomplete.classList.contains("show")) return;
+            const items = el.autocomplete.querySelectorAll(".autocomplete-item");
             if (!items.length) return;
 
-            if (e.key === 'ArrowDown') {
+            if (e.key === "ArrowDown") {
                 e.preventDefault();
-                items.forEach(i => i.classList.remove('highlighted'));
+                items.forEach(i => i.classList.remove("highlighted"));
                 state.highlightedIndex = (state.highlightedIndex + 1) % items.length;
-                items[state.highlightedIndex].classList.add('highlighted');
-                items[state.highlightedIndex].scrollIntoView({ block: 'nearest' });
-            } else if (e.key === 'ArrowUp') {
+                items[state.highlightedIndex].classList.add("highlighted");
+                items[state.highlightedIndex].scrollIntoView({ block: "nearest" });
+            } else if (e.key === "ArrowUp") {
                 e.preventDefault();
-                items.forEach(i => i.classList.remove('highlighted'));
-                state.highlightedIndex = state.highlightedIndex <= 0 ? items.length - 1 : state.highlightedIndex - 1;
-                items[state.highlightedIndex].classList.add('highlighted');
-                items[state.highlightedIndex].scrollIntoView({ block: 'nearest' });
-            } else if (e.key === 'Escape') {
-                el.autocomplete.classList.remove('show');
+                items.forEach(i => i.classList.remove("highlighted"));
+                state.highlightedIndex = state.highlightedIndex <= 0
+                    ? items.length - 1
+                    : state.highlightedIndex - 1;
+                items[state.highlightedIndex].classList.add("highlighted");
+                items[state.highlightedIndex].scrollIntoView({ block: "nearest" });
+
+} else if (e.key === "Escape") {
+                el.autocomplete.classList.remove("show");
             }
         };
 
@@ -1644,14 +1694,14 @@
             const val = el.searchInput.value.trim();
 
             if (!val) {
-                el.autocomplete.classList.remove('show');
-                state.searchQuery   = '';
+                el.autocomplete.classList.remove("show");
+                state.searchQuery   = "";
                 state.pendingSearch = null;
                 if (state.isSearchMode) {
-                    state.isSearchMode        = false;
-                    el.totalBatches.innerHTML = '';
-                    state.displayedCount      = BATCH_SIZE;
-                    DISPLAYED_BATCHES         = ALL_BATCHES.slice(0, BATCH_SIZE);
+                    state.isSearchMode   = false;
+                    el.totalBatches.innerHTML = "";
+                    state.displayedCount = BATCH_SIZE;
+                    DISPLAYED_BATCHES    = ALL_BATCHES.slice(0, BATCH_SIZE);
                     renderBatches(DISPLAYED_BATCHES, true);
                 }
                 return;
@@ -1672,14 +1722,14 @@
 
         document.onclick = (e) => {
             if (!el.searchInput.contains(e.target) && !el.autocomplete.contains(e.target)) {
-                el.autocomplete.classList.remove('show');
+                el.autocomplete.classList.remove("show");
             }
         };
 
         el.searchBtn.onclick    = () => performSearch();
-        el.totalTab.onclick     = () => switchTab('total');
-        el.favouriteTab.onclick = () => switchTab('favourite');
-        el.popupClose.onclick   = () => { el.telegramPopup.style.display = 'none'; };
+        el.totalTab.onclick     = () => switchTab("total");
+        el.favouriteTab.onclick = () => switchTab("favourite");
+        el.popupClose.onclick   = () => { el.telegramPopup.style.display = "none"; };
         // popupWhatsapp click handler removed
         el.popupTelegram.onclick = () => { window.open('https://channel.rarestudy.workers.dev', '_blank'); };
 
