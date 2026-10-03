@@ -46,8 +46,6 @@ body,html{min-height:100%;font-family:Inter,sans-serif;background:#0f172a;color:
 </div>
 
 <script>
-(function(){var e=localStorage.getItem('asm_access_expiry');if(!e||Date.now()>parseInt(e)){localStorage.removeItem('asm_access_expiry');window.location.href='/get-access';return;}})();
-
 const QS=new URLSearchParams(location.search);
 const BATCH_ID=QS.get('batchId')||'',SUBJECT_ID=QS.get('subjectId')||'';
 const BATCH_NAME=QS.get('batchName')||'',SUBJECT_NAME=QS.get('subjectName')||'';
