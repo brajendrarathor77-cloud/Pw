@@ -4,399 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="referrer" content="same-origin">
-<title>Arjuna JEE 2027 Khazana — AURA MAX</title>
-<link rel="icon" type="image/png" href="https://cdn.phototourl.com/member/2026-10-02-62a99f01-301c-41f1-9584-0fd12ae4b326.jpg">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;outline:none;-webkit-tap-highlight-color:transparent;user-select:none}
-body,html{min-height:100%;font-family:Inter,sans-serif;background:#0f172a;color:#e2e8f0}
-.back-section{position:fixed;top:0;left:0;right:0;height:50px;background:rgba(15,23,42,0.97);display:flex;align-items:center;z-index:1300;border-bottom:1px solid rgba(30,41,59,0.6);padding:0 8px}
-.back-section::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,158,11,0.4),transparent)}
-.back-link{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:#fff;border:none;background:transparent;cursor:pointer;padding:8px 10px;border-radius:8px;transition:transform 0.1s;text-decoration:none}
-.back-link:active{transform:scale(0.95)}
-.nav-icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:clamp(18px,4.5vw,22px);height:clamp(18px,4.5vw,22px)}
-.nav-icon svg{width:clamp(18px,4.5vw,22px);height:clamp(18px,4.5vw,22px);stroke:#6366f1;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;display:block}
-.back-label{font-size:clamp(14px,3.8vw,16px);font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100vw - 80px)}
-.page-body{padding-top:50px;padding-bottom:40px}
-
-/* SKELETON */
-.skel{background:linear-gradient(90deg,#1e293b 25%,#334155 50%,#1e293b 75%);background-size:200% 100%;animation:sk 1.4s infinite}
-@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.sk-course{width:clamp(140px,38vw,160px);height:clamp(155px,44vw,190px);border-radius:12px;flex-shrink:0}
-.sk-teacher{height:clamp(60px,18vw,80px);width:clamp(60px,18vw,80px);border-radius:14px}
-.sk-teacher-name{height:12px;width:70%;border-radius:6px;margin-top:6px}
-.sk-teacher-wrap{display:flex;flex-direction:column;align-items:center}
-.sk-section-title{height:22px;width:160px;border-radius:8px;margin:18px 14px 10px}
-.sk-row{display:flex;gap:10px;padding:0 14px 10px;overflow:hidden}
-
-/* SECTION BLOCK */
-.section-block{padding:18px 0 8px}
-.section-header{display:flex;align-items:center;justify-content:space-between;padding:0 14px 10px}
-.section-title{font-size:clamp(14px,4vw,18px);font-weight:800;color:#fff}
-.view-all-btn{display:inline-flex;align-items:center;gap:4px;font-size:clamp(12px,3vw,14px);font-weight:700;color:#f59e0b;cursor:pointer;background:none;border:none;padding:4px 2px;transition:opacity 0.15s}
-.view-all-btn:active{opacity:0.7}
-.view-all-btn svg{width:clamp(14px,3.5vw,16px);height:clamp(14px,3.5vw,16px);stroke:#f59e0b;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.courses-row{display:flex;overflow-x:auto;gap:10px;padding:0 14px 10px;-webkit-overflow-scrolling:touch}
-.courses-row::-webkit-scrollbar{display:none}
-
-/* COURSE CARD */
-.course-card{flex:0 0 auto;width:clamp(140px,38vw,160px);border-radius:12px;overflow:hidden;cursor:pointer;text-decoration:none;color:inherit;display:flex;flex-direction:column;background:#1e293b;border:1px solid rgba(255,255,255,0.07);transition:transform 0.12s}
-.course-card:active{transform:scale(0.96)}
-.card-img-wrap{position:relative;width:100%;height:clamp(80px,22vw,100px);overflow:hidden;background:#1e3a5f}
-.card-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.card-teacher-img{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:clamp(70px,20vw,90px);width:auto;max-width:100%;object-fit:contain;object-position:bottom;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
-.card-badge{position:absolute;top:6px;left:6px;font-size:8px;font-weight:800;padding:2px 6px;border-radius:5px;text-transform:uppercase;z-index:2}
-.bc-complete{background:#f59e0b;color:#000}
-.bc-crash{background:#ef4444;color:#fff}
-.bc-revision{background:#8b5cf6;color:#fff}
-.bc-other{background:#334155;color:#e2e8f0}
-.card-info{padding:8px 9px 9px;flex:1;display:flex;flex-direction:column;gap:3px}
-.card-name{font-size:clamp(10px,2.8vw,12px);font-weight:700;color:#fff;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card-tname{font-size:clamp(9px,2.5vw,11px);color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-/* VIEW ALL CARD in row */
-.va-card{flex:0 0 auto;width:clamp(75px,20vw,90px);border-radius:12px;background:rgba(245,158,11,0.08);border:1.5px dashed rgba(245,158,11,0.35);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;color:#f59e0b;font-size:clamp(10px,2.8vw,12px);font-weight:700;transition:transform 0.12s;min-height:130px}
-.va-card:active{transform:scale(0.95);background:rgba(245,158,11,0.15)}
-.va-card-icon{font-size:clamp(18px,5vw,24px)}
-
-.section-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);margin:4px 0}
-
-/* TEACHERS */
-.teachers-section{padding:18px 14px 10px}
-.teachers-title{font-size:clamp(14px,4vw,18px);font-weight:800;color:#fff;margin-bottom:14px}
-.teachers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,3vw,16px) clamp(8px,2.5vw,10px)}
-.teacher-item{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;transition:transform 0.12s}
-.teacher-item:active{transform:scale(0.95)}
-.teacher-photo{width:clamp(60px,18vw,80px);height:clamp(60px,18vw,80px);border-radius:14px;overflow:hidden;background:#1e3a5f;border:1.5px solid rgba(245,158,11,0.2);flex-shrink:0}
-.teacher-photo img{width:100%;height:100%;object-fit:cover;object-position:top center}
-.teacher-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:clamp(22px,6vw,32px)}
-.teacher-name{font-size:clamp(9px,2.5vw,12px);font-weight:700;color:#e2e8f0;text-align:center;line-height:1.3}
-
-/* OVERLAY */
-#all-overlay{display:none;position:fixed;inset:0;background:#0f172a;z-index:2000;overflow-y:auto}
-.ov-header{position:sticky;top:0;background:rgba(15,23,42,0.97);border-bottom:1px solid rgba(30,41,59,0.6);padding:0 14px;height:52px;display:flex;align-items:center;gap:10px;z-index:10}
-.ov-header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,0.4),transparent)}
-.ov-back{background:none;border:none;cursor:pointer;padding:4px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:transform 0.1s;flex-shrink:0}
-.ov-back:active{transform:scale(0.9)}
-.ov-back svg{width:20px;height:20px;stroke:#6366f1;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.ov-title{font-size:clamp(14px,4vw,17px);font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ov-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:14px;max-width:900px;margin:0 auto}
-.ov-grid .course-card{width:100%;flex:unset}
-.ov-skels{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 14px 14px;max-width:900px;margin:0 auto}
-.ov-skel-item{height:190px;border-radius:12px}
-</style>
-</head>
-<body>
-</div>
-<div class="back-section">
-    <button class="back-link" onclick="history.back()">
-        <span class="nav-icon"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></span>
-        <span class="back-label" id="back-label">Batches</span>
-    </button>
-</div>
-
-<div class="page-body" id="page-body">
-    <!-- Subject sections injected here -->
-    <!-- Skeleton while loading -->
-    <div id="init-skel">
-        <div class="sk-section-title skel"></div>
-        <div class="sk-row">
-            <div class="skel sk-course"></div>
-            <div class="skel sk-course"></div>
-            <div class="skel sk-course"></div>
-        </div>
-        <div class="sk-section-title skel" style="margin-top:24px"></div>
-        <div class="sk-row">
-            <div class="skel sk-course"></div>
-            <div class="skel sk-course"></div>
-            <div class="skel sk-course"></div>
-        </div>
-    </div>
-    <div class="teachers-section" id="teachers-section" style="display:none">
-        <div class="teachers-title">Browse By Teachers</div>
-        <div class="teachers-grid" id="teachers-grid">
-            <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
-            <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
-            <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
-            <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
-            <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
-            <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
-        </div>
-    </div>
-</div>
-
-<!-- OVERLAY -->
-<div id="all-overlay">
-    <div class="ov-header">
-        <button class="ov-back" onclick="closeOverlay()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <div id="ov-title" class="ov-title"></div>
-    </div>
-    <div id="ov-grid" class="ov-grid"></div>
-    <div id="ov-skels" class="ov-skels" style="display:none">
-        <div class="skel ov-skel-item"></div>
-        <div class="skel ov-skel-item"></div>
-    </div>
-</div>
-
-<script>
-const QS=new URLSearchParams(location.search);
-const PROGRAM_ID=QS.get('khazanaProgramId')||'';
-const BATCH_NAME=QS.get('batchName')||'';
-const BATCH_ID=QS.get('batchId')||'';
-if(!PROGRAM_ID)location.href='/batches';
-document.getElementById('back-label').textContent=BATCH_NAME||'Batches';
-
-async function pw(url){return fetch(url).then(r=>r.json());}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function ep(v){return encodeURIComponent(v||'')}
-function badgeCls(t){t=(t||'').toLowerCase();if(t.includes('complete'))return'complete';if(t.includes('crash'))return'crash';if(t.includes('revision'))return'revision';return'other';}
-
-function parseCourse(c,subId){
-    const img=c.imageId?c.imageId.baseUrl+c.imageId.key:'';
-    const bgImg=c.backgroundImage||img;
-    const ti=c.teacher?.imageId?c.teacher.imageId.baseUrl+c.teacher.imageId.key:'';
-    const tn=(c.teacher?((c.teacher.firstName||'')+' '+(c.teacher.lastName||'')).trim():c.teacherName||'');
-    const ct=typeof c.courseType==='object'?c.courseType?.name||'':c.courseType||'';
-    return{_id:c._id,name:c.name||'',bg:bgImg,teacher_img:ti,teacher_name:tn,course_type:ct,subject_id:subId||c.subjectId||''};
-}
-
-function buildCard(course){
-    const bc=badgeCls(course.course_type);
-    const href=`/khazana-chapters?programId=${ep(PROGRAM_ID)}&subjectId=${ep(course.subject_id)}&chapterId=${ep(course._id)}&batchName=${ep(course.name)}`;
-    const a=document.createElement('a');a.className='course-card';a.href=href;
-    a.innerHTML=`<div class="card-img-wrap">
-        ${course.bg?`<img class="card-bg" src="${esc(course.bg)}" alt="" onerror="this.style.display='none'">`:''}
-        ${course.teacher_img?`<img class="card-teacher-img" src="${esc(course.teacher_img)}" alt="" onerror="this.style.display='none'">`:''}
-        ${course.course_type?`<span class="card-badge bc-${bc}">${esc(course.course_type)}</span>`:''}
-    </div>
-    <div class="card-info"><div class="card-name">${esc(course.name)}</div><div class="card-tname">By ${esc(course.teacher_name)}</div></div>`;
-    return a;
-}
-
-/* State per subject */
-const subjectState={};
-const subjectOptions=[];
-let teacherPage=1,teacherLoading=false,teacherDone=false;
-let overlaySubId='',overlayPage=1,overlayLoading=false,overlayDone=false;
-
-async function init(){
-    try{
-        const data=await pw(`https://proxy.streamvideo.co.in/fetch/api.penpencil.co/v2/programs/${PROGRAM_ID}/filters?page=1&limit=20`);
-        const pd=data.data||{};
-        const khName=pd.name||'Khazana';
-        const SITE_NAME='vedstudy';
-document.title=khName+' — '+SITE_NAME;
-
-        /* Extract subject filters */
-        for(const f of (pd.filters||[])){
-            const opts=f.options||[];
-            if(opts.length){
-                for(const opt of opts.slice(1)){
-                    if(opt.name&&opt._id&&opt._id!=='all')subjectOptions.push({_id:opt._id,name:opt.name});
-                }
-                break;
-            }
-        }
-
-        /* Remove init skeleton, build real sections */
-        document.getElementById('init-skel').remove();
-        const body=document.getElementById('page-body');
-        const teachEl=document.getElementById('teachers-section');
-
-        if(!subjectOptions.length){
-            teachEl.style.display='block';
-            loadTeachers();
-            return;
-        }
-
-        subjectOptions.forEach(sub=>{
-            subjectState[sub._id]={page:1,loading:false,done:false,courses:[]};
-            /* Section skeleton block */
-            const block=document.createElement('div');block.className='section-block';block.id='blk-'+sub._id;
-            block.innerHTML=`<div class="section-header">
-                <div class="section-title">${esc(sub.name)}</div>
-                <button class="view-all-btn" onclick="openOverlay('${esc(sub.name).replace(/'/g,"\\'")}','${esc(sub._id)}')">View All <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
-            </div>
-            <div class="courses-row" id="row-${esc(sub._id)}">
-                <div class="skel sk-course"></div><div class="skel sk-course"></div><div class="skel sk-course"></div>
-            </div>`;
-            body.insertBefore(block,teachEl);
-            const div=document.createElement('div');div.className='section-divider';
-            body.insertBefore(div,teachEl);
-        });
-
-        teachEl.style.display='block';
-
-        /* Load page 1 of all subjects in parallel */
-        await Promise.all(subjectOptions.map(s=>loadSubjectPage(s._id,1)));
-
-        /* Load teachers on scroll */
-        loadTeachers();
-        setupScroll();
-
-    }catch{document.getElementById('init-skel').innerHTML='<p style="text-align:center;padding:40px;color:#64748b">Failed to load</p>';}
-}
-
-async function loadSubjectPage(subId,page){
-    const st=subjectState[subId];
-    if(!st||st.loading||(st.done&&page>1))return;
-    st.loading=true;
-    try{
-        const data=await pw(`https://proxy.streamvideo.co.in/fetch/api.penpencil.co/v2/programs/${PROGRAM_ID}/subjects/${subId}/chapters/list?page=${page}&limit=20`);
-        const items=(data.data||[]).map(c=>parseCourse(c,subId));
-        st.courses.push(...items);
-        if(items.length<20)st.done=true;
-        else st.page=page+1;
-        renderRow(subId);
-    }catch{}
-    finally{st.loading=false;}
-}
-
-function renderRow(subId){
-    const st=subjectState[subId];
-    const row=document.getElementById('row-'+subId);
-    if(!row)return;
-    row.innerHTML='';
-    /* Show first 5 in row */
-    st.courses.slice(0,5).forEach(c=>row.appendChild(buildCard(c)));
-    /* View all card if more */
-    if(st.courses.length>5||!st.done){
-        const va=document.createElement('div');va.className='va-card';
-        va.innerHTML=`<span class="va-card-icon">📚</span><span>View All</span>`;
-        const sub=subjectOptions.find(s=>s._id===subId);
-        va.onclick=()=>openOverlay(sub?.name||'',subId);
-        row.appendChild(va);
-    }
-}
-
-/* TEACHERS */
-async function loadTeachers(){
-    if(teacherLoading||teacherDone)return;teacherLoading=true;
-    const grid=document.getElementById('teachers-grid');
-    if(teacherPage===1)grid.innerHTML='<div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>';
-    try{
-        const data=await pw(`https://proxy.streamvideo.co.in/fetch/api.penpencil.co/v2/programs/${PROGRAM_ID}/teachers?popular=false&page=${teacherPage}&limit=20`);
-        if(teacherPage===1)grid.innerHTML='';
-        const items=data.data||[];
-        if(!items.length){teacherDone=true;if(teacherPage===1)grid.innerHTML='<p style="grid-column:1/-1;text-align:center;padding:40px;color:#64748b">No teachers found</p>';return;}
-        items.forEach(t=>{
-            const img=t.imageId?t.imageId.baseUrl+t.imageId.key:'';
-            const name=(t.name||((t.firstName||'')+' '+(t.lastName||'')).trim());
-            const div=document.createElement('div');div.className='teacher-item';
-            div.innerHTML=`<div class="teacher-photo">${img?`<img src="${esc(img)}" alt="${esc(name)}" onerror="this.parentElement.innerHTML='<div class=teacher-ph>👨‍🏫</div>'">`:'<div class="teacher-ph">👨‍🏫</div>'}</div><div class="teacher-name">${esc(name)}</div>`;
-            div.onclick=()=>openTeacherOverlay(t._id,name);
-            grid.appendChild(div);
-        });
-        if(items.length<20)teacherDone=true;
-        else teacherPage++;
-    }catch{if(teacherPage===1)document.getElementById('teachers-grid').innerHTML='';}
-    finally{teacherLoading=false;}
-}
-
-/* SCROLL: load more subjects and teachers */
-function setupScroll(){
-    window.addEventListener('scroll',()=>{
-        const near=window.scrollY+window.innerHeight>=document.documentElement.scrollHeight-250;
-        if(!near)return;
-        if(!teacherLoading&&!teacherDone)loadTeachers();
-        subjectOptions.forEach(sub=>{
-            const st=subjectState[sub._id];
-            if(st&&!st.loading&&!st.done)loadSubjectPage(sub._id,st.page);
-        });
-    });
-}
-
-/* VIEW ALL OVERLAY */
-function openOverlay(name,subId){
-    overlaySubId=subId;overlayPage=1;overlayLoading=false;overlayDone=false;
-    document.getElementById('ov-title').textContent=name;
-    const grid=document.getElementById('ov-grid');grid.innerHTML='';
-    /* Show already-loaded data immediately */
-    const st=subjectState[subId];
-    if(st&&st.courses.length){
-        st.courses.forEach(c=>grid.appendChild(buildCard(c)));
-        if(!st.done){overlayPage=st.page;}
-        else overlayDone=true;
-    } else {
-        /* skeleton */
-        grid.innerHTML='<div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div>';
-        if(st&&!st.done)overlayPage=st.page;
-    }
-    document.getElementById('all-overlay').style.display='block';
-    document.body.style.overflow='hidden';
-    document.getElementById('all-overlay').onscroll=()=>{
-        const el=document.getElementById('all-overlay');
-        if(el.scrollTop+el.clientHeight>=el.scrollHeight-100&&!overlayLoading&&!overlayDone)loadOverlayMore();
-    };
-}
-
-async function loadOverlayMore(){
-    if(overlayLoading||overlayDone)return;overlayLoading=true;
-    const grid=document.getElementById('ov-grid');
-    const sk=document.getElementById('ov-skels');sk.style.display='grid';
-    try{
-        const data=await pw(`https://proxy.streamvideo.co.in/fetch/api.penpencil.co/v2/programs/${PROGRAM_ID}/subjects/${overlaySubId}/chapters/list?page=${overlayPage}&limit=20`);
-        sk.style.display='none';
-        const items=(data.data||[]).map(c=>parseCourse(c,overlaySubId));
-        /* remove skeletons if were showing */
-        grid.querySelectorAll('.skel').forEach(s=>s.remove());
-        items.forEach(c=>grid.appendChild(buildCard(c)));
-        if(subjectState[overlaySubId])subjectState[overlaySubId].courses.push(...items);
-        if(items.length<20){overlayDone=true;if(subjectState[overlaySubId])subjectState[overlaySubId].done=true;}
-        else overlayPage++;
-    }catch{sk.style.display='none';}
-    finally{overlayLoading=false;}
-}
-
-function closeOverlay(){document.getElementById('all-overlay').style.display='none';document.body.style.overflow='';}
-
-/* TEACHER OVERLAY */
-function openTeacherOverlay(tid,name){
-    let ov=document.getElementById('t-ov');
-    if(!ov){
-        ov=document.createElement('div');ov.id='t-ov';
-        ov.style.cssText='position:fixed;inset:0;background:#0f172a;z-index:2100;overflow-y:auto;display:block';
-        ov.innerHTML=`<div style="position:sticky;top:0;background:rgba(15,23,42,0.97);border-bottom:1px solid rgba(30,41,59,0.5);padding:0 14px;height:52px;display:flex;align-items:center;gap:10px;z-index:10">
-            <button onclick="closeTeacherOv()" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;border-radius:8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-            <div id="t-ov-title" style="font-size:clamp(14px,4vw,17px);font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
-        </div>
-        <div id="t-ov-grid" class="ov-grid" style="padding:14px;max-width:900px;margin:0 auto"></div>`;
-        document.body.appendChild(ov);
-    }
-    document.getElementById('t-ov-title').textContent=name;
-    const grid=document.getElementById('t-ov-grid');
-    grid.innerHTML='<div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div>';
-    ov.style.display='block';document.body.style.overflow='hidden';
-    fetchTeacherCourses(tid,grid);
-}
-async function fetchTeacherCourses(tid,grid){
-    grid.innerHTML='';
-    try{
-        let pg=1;
-        while(true){
-            const data=await pw(`https://proxy.streamvideo.co.in/fetch/api.penpencil.co/v2/programs/${PROGRAM_ID}/teacher/${tid}/chapters?page=${pg}&limit=20`);
-            const items=data.data||[];
-            if(!items.length)break;
-            items.map(c=>parseCourse(c,c.subjectId||'')).forEach(c=>grid.appendChild(buildCard(c)));
-            if(items.length<20)break;
-            pg++;
-        }
-        if(!grid.children.length)grid.innerHTML='<p style="grid-column:1/-1;text-align:center;padding:40px;color:#64748b">No courses found</p>';
-    }catch{grid.innerHTML='<p style="grid-column:1/-1;text-align:center;padding:40px;color:#64748b">Failed to load</p>';}
-}
-function closeTeacherOv(){const ov=document.getElementById('t-ov');if(ov)ov.style.display='none';document.body.style.overflow='';}
-
-(function(){['contextmenu','selectstart','dragstart','copy'].forEach(e=>document.addEventListener(e,ev=>ev.preventDefault()));document.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key))||(e.ctrlKey&&['U','S'].includes(e.key))){e.preventDefault();return false;}});})();
-init();
-</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a482c813fc2cb97c',t:'MTc5MTYwNTQ5MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920" integrity="sha512-L0ha0OXavK/8okipN9F8BtP84dg9DUhPERbBXzwI6dgTA55d2+yweo3pn5CSFYs45/r8md2+xvUPtTdvTNRfjA==" data-cf-beacon='{"version":"2024.11.0","token":"d791bbf0a81b4e638ace830305588120","r":1,"spa":2}' crossorigin="anonymous"></script>
-</body>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="referrer" content="same-origin">
-<title>Arjuna JEE 2027 Khazana — vedstudy</title>
+<title>Khazana — vedstudy</title>
 <link rel="icon" type="image/png" href="/static/site_logo.png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;outline:none;-webkit-tap-highlight-color:transparent;user-select:none}
@@ -478,17 +86,14 @@ body,html{min-height:100%;font-family:Inter,sans-serif;background:#0f172a;color:
 </style>
 </head>
 <body>
-</div>
 <div class="back-section">
     <button class="back-link" onclick="history.back()">
         <span class="nav-icon"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></span>
-        <span class="back-label" id="back-label">Batches</span>
+        <span class="back-label" id="back-label">Khazana</span>
     </button>
 </div>
 
 <div class="page-body" id="page-body">
-    <!-- Subject sections injected here -->
-    <!-- Skeleton while loading -->
     <div id="init-skel">
         <div class="sk-section-title skel"></div>
         <div class="sk-row">
@@ -506,9 +111,6 @@ body,html{min-height:100%;font-family:Inter,sans-serif;background:#0f172a;color:
     <div class="teachers-section" id="teachers-section" style="display:none">
         <div class="teachers-title">Browse By Teachers</div>
         <div class="teachers-grid" id="teachers-grid">
-            <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
-            <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
-            <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
             <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
             <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
             <div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>
@@ -530,14 +132,20 @@ body,html{min-height:100%;font-family:Inter,sans-serif;background:#0f172a;color:
 </div>
 
 <script>
-const QS=new URLSearchParams(location.search);
-const PROGRAM_ID=QS.get('khazanaProgramId')||'';
-const BATCH_NAME=QS.get('batchName')||'';
-const BATCH_ID=QS.get('batchId')||'';
-if(!PROGRAM_ID)location.href='/batches';
-document.getElementById('back-label').textContent=BATCH_NAME||'Batches';
+const QS = new URLSearchParams(location.search);
+// Default fallback ID agar URL mein programId na ho
+const PROGRAM_ID = QS.get('khazanaProgramId') || QS.get('programId') || '62cc7a39ea773600110bec2f';
+const BATCH_NAME = QS.get('batchName') || '';
+if(BATCH_NAME) document.getElementById('back-label').textContent = BATCH_NAME;
 
-async function pw(url){return fetch(url).then(r=>r.json());}
+async function pw(url){
+    try {
+        const res = await fetch(url);
+        return await res.json();
+    } catch(e) {
+        return {};
+    }
+}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function ep(v){return encodeURIComponent(v||'')}
 function badgeCls(t){t=(t||'').toLowerCase();if(t.includes('complete'))return'complete';if(t.includes('crash'))return'crash';if(t.includes('revision'))return'revision';return'other';}
@@ -553,7 +161,7 @@ function parseCourse(c,subId){
 
 function buildCard(course){
     const bc=badgeCls(course.course_type);
-    const href=`/khazana-chapters?programId=${ep(PROGRAM_ID)}&subjectId=${ep(course.subject_id)}&chapterId=${ep(course._id)}&batchName=${ep(course.name)}`;
+    const href=`/khazana-chapters.html?programId=${ep(PROGRAM_ID)}&subjectId=${ep(course.subject_id)}&chapterId=${ep(course._id)}&batchName=${ep(course.name)}`;
     const a=document.createElement('a');a.className='course-card';a.href=href;
     a.innerHTML=`<div class="card-img-wrap">
         ${course.bg?`<img class="card-bg" src="${esc(course.bg)}" alt="" onerror="this.style.display='none'">`:''}
@@ -564,7 +172,6 @@ function buildCard(course){
     return a;
 }
 
-/* State per subject */
 const subjectState={};
 const subjectOptions=[];
 let teacherPage=1,teacherLoading=false,teacherDone=false;
@@ -575,10 +182,8 @@ async function init(){
         const data=await pw(`https://proxy.streamvideo.co.in/fetch/api.penpencil.co/v2/programs/${PROGRAM_ID}/filters?page=1&limit=20`);
         const pd=data.data||{};
         const khName=pd.name||'Khazana';
-        const SITE_NAME='vedstudy';
-document.title=khName+' — '+SITE_NAME;
+        document.title=khName+' — vedstudy';
 
-        /* Extract subject filters */
         for(const f of (pd.filters||[])){
             const opts=f.options||[];
             if(opts.length){
@@ -589,8 +194,8 @@ document.title=khName+' — '+SITE_NAME;
             }
         }
 
-        /* Remove init skeleton, build real sections */
-        document.getElementById('init-skel').remove();
+        const skelEl = document.getElementById('init-skel');
+        if(skelEl) skelEl.remove();
         const body=document.getElementById('page-body');
         const teachEl=document.getElementById('teachers-section');
 
@@ -602,7 +207,6 @@ document.title=khName+' — '+SITE_NAME;
 
         subjectOptions.forEach(sub=>{
             subjectState[sub._id]={page:1,loading:false,done:false,courses:[]};
-            /* Section skeleton block */
             const block=document.createElement('div');block.className='section-block';block.id='blk-'+sub._id;
             block.innerHTML=`<div class="section-header">
                 <div class="section-title">${esc(sub.name)}</div>
@@ -617,15 +221,13 @@ document.title=khName+' — '+SITE_NAME;
         });
 
         teachEl.style.display='block';
-
-        /* Load page 1 of all subjects in parallel */
         await Promise.all(subjectOptions.map(s=>loadSubjectPage(s._id,1)));
-
-        /* Load teachers on scroll */
         loadTeachers();
         setupScroll();
 
-    }catch{document.getElementById('init-skel').innerHTML='<p style="text-align:center;padding:40px;color:#64748b">Failed to load</p>';}
+    }catch(e){
+        document.getElementById('init-skel').innerHTML='<p style="text-align:center;padding:40px;color:#ef4444">Failed to load Khazana data.</p>';
+    }
 }
 
 async function loadSubjectPage(subId,page){
@@ -648,9 +250,7 @@ function renderRow(subId){
     const row=document.getElementById('row-'+subId);
     if(!row)return;
     row.innerHTML='';
-    /* Show first 5 in row */
     st.courses.slice(0,5).forEach(c=>row.appendChild(buildCard(c)));
-    /* View all card if more */
     if(st.courses.length>5||!st.done){
         const va=document.createElement('div');va.className='va-card';
         va.innerHTML=`<span class="va-card-icon">📚</span><span>View All</span>`;
@@ -660,11 +260,9 @@ function renderRow(subId){
     }
 }
 
-/* TEACHERS */
 async function loadTeachers(){
     if(teacherLoading||teacherDone)return;teacherLoading=true;
     const grid=document.getElementById('teachers-grid');
-    if(teacherPage===1)grid.innerHTML='<div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div><div class="sk-teacher-wrap"><div class="skel sk-teacher"></div><div class="skel sk-teacher-name"></div></div>';
     try{
         const data=await pw(`https://proxy.streamvideo.co.in/fetch/api.penpencil.co/v2/programs/${PROGRAM_ID}/teachers?popular=false&page=${teacherPage}&limit=20`);
         if(teacherPage===1)grid.innerHTML='';
@@ -680,11 +278,10 @@ async function loadTeachers(){
         });
         if(items.length<20)teacherDone=true;
         else teacherPage++;
-    }catch{if(teacherPage===1)document.getElementById('teachers-grid').innerHTML='';}
+    }catch{}
     finally{teacherLoading=false;}
 }
 
-/* SCROLL: load more subjects and teachers */
 function setupScroll(){
     window.addEventListener('scroll',()=>{
         const near=window.scrollY+window.innerHeight>=document.documentElement.scrollHeight-250;
@@ -697,51 +294,25 @@ function setupScroll(){
     });
 }
 
-/* VIEW ALL OVERLAY */
 function openOverlay(name,subId){
     overlaySubId=subId;overlayPage=1;overlayLoading=false;overlayDone=false;
     document.getElementById('ov-title').textContent=name;
     const grid=document.getElementById('ov-grid');grid.innerHTML='';
-    /* Show already-loaded data immediately */
     const st=subjectState[subId];
     if(st&&st.courses.length){
         st.courses.forEach(c=>grid.appendChild(buildCard(c)));
-        if(!st.done){overlayPage=st.page;}
+        if(!st.done)overlayPage=st.page;
         else overlayDone=true;
-    } else {
-        /* skeleton */
-        grid.innerHTML='<div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div>';
+    }else{
+        grid.innerHTML='<div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div>';
         if(st&&!st.done)overlayPage=st.page;
     }
     document.getElementById('all-overlay').style.display='block';
     document.body.style.overflow='hidden';
-    document.getElementById('all-overlay').onscroll=()=>{
-        const el=document.getElementById('all-overlay');
-        if(el.scrollTop+el.clientHeight>=el.scrollHeight-100&&!overlayLoading&&!overlayDone)loadOverlayMore();
-    };
-}
-
-async function loadOverlayMore(){
-    if(overlayLoading||overlayDone)return;overlayLoading=true;
-    const grid=document.getElementById('ov-grid');
-    const sk=document.getElementById('ov-skels');sk.style.display='grid';
-    try{
-        const data=await pw(`https://proxy.streamvideo.co.in/fetch/api.penpencil.co/v2/programs/${PROGRAM_ID}/subjects/${overlaySubId}/chapters/list?page=${overlayPage}&limit=20`);
-        sk.style.display='none';
-        const items=(data.data||[]).map(c=>parseCourse(c,overlaySubId));
-        /* remove skeletons if were showing */
-        grid.querySelectorAll('.skel').forEach(s=>s.remove());
-        items.forEach(c=>grid.appendChild(buildCard(c)));
-        if(subjectState[overlaySubId])subjectState[overlaySubId].courses.push(...items);
-        if(items.length<20){overlayDone=true;if(subjectState[overlaySubId])subjectState[overlaySubId].done=true;}
-        else overlayPage++;
-    }catch{sk.style.display='none';}
-    finally{overlayLoading=false;}
 }
 
 function closeOverlay(){document.getElementById('all-overlay').style.display='none';document.body.style.overflow='';}
 
-/* TEACHER OVERLAY */
 function openTeacherOverlay(tid,name){
     let ov=document.getElementById('t-ov');
     if(!ov){
@@ -756,10 +327,11 @@ function openTeacherOverlay(tid,name){
     }
     document.getElementById('t-ov-title').textContent=name;
     const grid=document.getElementById('t-ov-grid');
-    grid.innerHTML='<div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div>';
+    grid.innerHTML='<div class="skel ov-skel-item"></div><div class="skel ov-skel-item"></div>';
     ov.style.display='block';document.body.style.overflow='hidden';
     fetchTeacherCourses(tid,grid);
 }
+
 async function fetchTeacherCourses(tid,grid){
     grid.innerHTML='';
     try{
@@ -775,11 +347,10 @@ async function fetchTeacherCourses(tid,grid){
         if(!grid.children.length)grid.innerHTML='<p style="grid-column:1/-1;text-align:center;padding:40px;color:#64748b">No courses found</p>';
     }catch{grid.innerHTML='<p style="grid-column:1/-1;text-align:center;padding:40px;color:#64748b">Failed to load</p>';}
 }
+
 function closeTeacherOv(){const ov=document.getElementById('t-ov');if(ov)ov.style.display='none';document.body.style.overflow='';}
 
-(function(){['contextmenu','selectstart','dragstart','copy'].forEach(e=>document.addEventListener(e,ev=>ev.preventDefault()));document.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key))||(e.ctrlKey&&['U','S'].includes(e.key))){e.preventDefault();return false;}});})();
 init();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a482c813fc2cb97c',t:'MTc5MTYwNTQ5MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920" integrity="sha512-L0ha0OXavK/8okipN9F8BtP84dg9DUhPERbBXzwI6dgTA55d2+yweo3pn5CSFYs45/r8md2+xvUPtTdvTNRfjA==" data-cf-beacon='{"version":"2024.11.0","token":"d791bbf0a81b4e638ace830305588120","r":1,"spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
